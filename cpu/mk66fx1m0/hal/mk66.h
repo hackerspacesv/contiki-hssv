@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------------------------------------+
-//| ARM Cortex m4f core configuration header for the Kinetis MK66 cpu.                             |
+//| ARM Cortex m4f core configuration header for the Kinetis MK66 MCU.                             |
 //|                                                                                                |
 //| This header defines vector number enumerations and core configuration options required by      |
 //| the CMSIS in order to provide core support.                                                    |

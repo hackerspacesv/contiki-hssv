@@ -12,6 +12,9 @@
 
 #include "mk66.h"
 #include "mk66-wdog.h"
+#include "mk66-smc.h"
+#include "mk66-osc.h"
+#include "mk66-mcg.h"
 #include "mk66-sim.h"
 
 //Interrupt vector handler function type.
@@ -47,14 +50,60 @@ void startup() {
   uint32_t *sram;
 
   //Disable the watcdog.
-  WDOG->UNLOCK = 0xC520;
-  WDOG->UNLOCK = 0xD928;
-  WDOG->STCTRLH = 0x0010;
+  WDOG->UNLOCK = WDOG_UNLOCK_Seq_A;
+  WDOG->UNLOCK = WDOG_UNLOCK_Seq_B;
+  WDOG->STCTRLH = WDOG_STCTRLH_WDOGEN_Disabled | WDOG_STCTRLH_ALLOWUPDATE_Yes;
 
   //Enable the floating point unit.
   SCB->CPACR = (0xF << 20);
 
-  //Enable the clocks of all ports
+  //Enable all power modes.
+  SMC->PMPROT = SMC_PMPROT_AHSRUN_Allowed | SMC_PMPROT_AVLP_Allowed | SMC_PMPROT_ALLS_Allowed |
+                SMC_PMPROT_AVLLS_Allowed;
+
+  //Configure the 16MHz external oscillator.
+  OSC->CR = OSC_CR_ERCLKEN_Enabled | OSC_CR_SC2P_Enabled | OSC_CR_SC8P_Enabled;
+  MCG->C2 = MCG_C2_RANGE_Very_High | MCG_C2_HGO_Low_Power | MCG_C2_EREFS_Oscillator;
+
+  //Switch to FBE (FLL bypassed external) mode while changing the reference to external. This causes
+  //the external oscillator to start up.
+  MCG->C1 = MCG_C1_CLKS_External | MCG_C1_FRDIV_Div_16_512 | MCG_C1_IREFS_External;
+  //Note: FRDIV is set to 512 just to set an input frequency of 16MHz/512 = 31.25KHz to the FLL
+  //(which requires a value around 32.768KHz). It's not really used.
+
+  //Wait for the system clocks to transition to the new state.
+  while ((MCG->S & MCG_S_OSCINIT0_Msk) != MCG_S_OSCINIT0_Ready);  //Wait for external oscillator
+  while ((MCG->S & MCG_S_IREFST_Msk) != MCG_S_IREFST_External);   //Wait for reference switch
+  while ((MCG->S & MCG_S_CLKST_Msk) != MCG_S_CLKST_External);     //Wait for system clock switch
+
+  //We're running on the external crystal now. Set the PLL external reference divider to divide by
+  //two, to get an input reference of 8MHz.
+  MCG->C5 = MCG_C5_PRDIV_Div_2;
+
+  //Transition to PBE (PLL bypassed external) mode. This causes to PLL to start up. Set the
+  //multiplier to 45. Final frequency will be 8MHz * 45 / 2 = 180MHz.
+  MCG->C6 = MCG_C6_PLLS_PLLCS | MCG_C6_VDIV_Div_45;
+
+  //Wait for the PLL to become ready.
+  while ((MCG->S & MCG_S_PLLST_Msk) != MCG_S_PLLST_PLLCS);    //Wait for the PLL to be selected
+  while ((MCG->S & MCG_S_LOCK0_Msk) != MCG_S_LOCK0_Locked);   //Wait for the PLL to lock
+
+  //Almost ready for transition to PLL. Set HSRUN mode.
+  SMC->PMCTRL = SMC_PMCTRL_RUNM_HSRUN;
+  while (SMC->PMSTAT != SMC_PMSTAT_HSRUN);
+
+  //Configure all prescalers. Core runs at 180MHz, bus runs at 60MHz and flash runs at 25.71MHz.
+  SIM->CLKDIV1 = ((0 << SIM_CLKDIV1_OUTDIV1_Pos) & SIM_CLKDIV1_OUTDIV1_Msk) |   //180 / 1 = 180MHz
+                 ((2 << SIM_CLKDIV1_OUTDIV2_Pos) & SIM_CLKDIV1_OUTDIV2_Msk) |   //180 / 3 = 60MHz
+                 ((6 << SIM_CLKDIV1_OUTDIV4_Pos) & SIM_CLKDIV1_OUTDIV4_Msk);    //180 / 7 = 25.71MHz
+
+  //Transition into PEE (PLL engaged external) mode. Keep the FRDIV and IRFEFS settings unchanged.
+  MCG->C1 = MCG_C1_CLKS_FLL_PLLCS | MCG_C1_FRDIV_Div_16_512 | MCG_C1_IREFS_External;
+
+  //Wait for the PLL to be selected as a system clock source.
+  while ((MCG->S & MCG_S_CLKST_Msk) != MCG_S_CLKST_PLL);
+
+  //Enable the clocks of all ports.
   SIM->SCGC5 = SIM_SCGC5_PORTA_Enabled | SIM_SCGC5_PORTB_Enabled | SIM_SCGC5_PORTC_Enabled |
                SIM_SCGC5_PORTD_Enabled | SIM_SCGC5_PORTE_Enabled;
 
@@ -86,6 +135,8 @@ static void unused_handler() {
   //The default unused handler does nothing, just stalls the CPU.
   for (;;);
 }
+
+//--------------------------------------------------------------------------------------------------
 
 //Weak references for core system handler vectors.
 void __attribute__((weak, alias("unused_handler"))) nmi_handler();
@@ -195,6 +246,8 @@ void __attribute__((weak, alias("unused_handler"))) can_1_error_handler();
 void __attribute__((weak, alias("unused_handler"))) can_1_transmit_warning_handler();
 void __attribute__((weak, alias("unused_handler"))) can_1_receive_warning_handler();
 void __attribute__((weak, alias("unused_handler"))) can_1_wake_up_handler();
+
+//--------------------------------------------------------------------------------------------------
 
 //Processor vector table, located at 0x00000000.
 static __attribute__ ((section(".vectors"), used))
@@ -319,6 +372,8 @@ handler_t vectors[116] = {
   can_1_receive_warning_handler,    //114 - CAN 1 receive warning
   can_1_error_handler,              //115 - CAN 1 wake up
 };
+
+//--------------------------------------------------------------------------------------------------
 
 //Flash configuration field instance, located at 0x00000400.
 static __attribute__ ((section(".flash_configuration_field"), used))
