@@ -25,7 +25,7 @@ SECTIONS {
     KEEP(*(.flash_configuration_field))
   } > FLASH
 
-  /* Read only sections (code, data, etc) are allocated flash */
+  /* Read only sections (code, data, etc) are allocated in flash */
   .text : {
     . = ALIGN(4);
     *(.text*)

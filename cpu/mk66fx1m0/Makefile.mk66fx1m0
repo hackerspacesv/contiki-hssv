@@ -34,7 +34,7 @@ CUSTOM_RULE_LINK = 1
 	$(TRACE_LD)
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_STARTFILES) ${filter-out %.a,$^} \
 	    ${filter %.a,$^} $(TARGET_LIBFILES) -o $@
-	$(OBJCOPY) $< -O ihex $@
+	$(OBJCOPY) $@ -O ihex $(@:.$(TARGET)=.hex)
 
 #Add a clean target dependency.
 clean: clean_output
