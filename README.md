@@ -1,6 +1,6 @@
 Welcome to Contiki - Hackerspace San Salvador
 ===================
-This repository contains an out-of-tree implementation of Contiki that 
+This repository contains an out-of-tree implementation of [Contiki](http://www.contiki-os.org/) that 
 adds support for new platforms and projects used or developed in the [Hackerspace San Salvador](http://hackerspace.teubi.co/wiki/).
 
 Contiki is the Operating System for the Internet of Things. It supports cooperative multi-tasking and provides an extensive API to develop network-enabled solutions. It is known to work in highly resource-constrained embedded enviroments and its framework-oriented design facilitates to migrate it to new microcontrollers.
