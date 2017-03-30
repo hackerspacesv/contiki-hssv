@@ -13,6 +13,11 @@ on this repository:
 
 - PJRC's [Teensy 3.6](https://www.pjrc.com/store/teensy36.html) based on the [Freescale Kinetis](http://www.nxp.com/products/microcontrollers-and-processors/arm-processors/kinetis-cortex-m-mcus/k-series-performance-m4:KINETIS_K_SERIES) mk66fx1m0
 
+## Planned Support
+This is the list of future (planned) implementations:
+- Sparkfun [nRF52382](https://www.pjrc.com/store/teensy36.html) breakout board based on the [Nordic nRF52832](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF52832)
+- PJRC's [Teensy LC](https://www.pjrc.com/teensy/teensyLC.html) based on the [Freescale Kinetis](http://www.nxp.com/products/microcontrollers-and-processors/arm-processors/kinetis-cortex-m-mcus/k-series-performance-m4:KINETIS_K_SERIES) mkl26z64vft4
+
 ## Credits
 Thanks to Joksan Alvarado for initiating the support for new platforms on Contiki.
 
