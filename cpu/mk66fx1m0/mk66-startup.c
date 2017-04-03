@@ -31,7 +31,7 @@ struct flash_configuration_field_type {
 };
 
 //Symbols exported by the linker script.
-extern uint32_t __ram_end__;
+extern uint32_t __stack_end__;
 extern const uint32_t __relocate_flash_start__;
 extern uint32_t __relocate_sram_start__;
 extern uint32_t __relocate_sram_end__;
@@ -123,11 +123,6 @@ void startup() {
 
   //System is up. Call the main function.
   main();
-}
-
-//Exit routine (not used, provided just to compile cleanly).
-void _exit(int status) {
-  for (;;);
 }
 
 //Default interrupt handler.
@@ -253,22 +248,22 @@ void __attribute__((weak, alias("unused_handler"))) can_1_wake_up_handler();
 static __attribute__ ((section(".vectors"), used))
 handler_t vectors[116] = {
   //Core system handler vectors.
-  (handler_t) &__ram_end__,   //0 - Initial stack pointer
-  startup,                    //1 - Initial program counter
-  nmi_handler,                //2 - Non maskable interrupt
-  hard_fault_handler,         //3 - Hard fault
-  memmanage_fault_handler,    //4 - MemManage fault
-  bus_fault_handler,          //5 - Bus fault
-  usage_fault_handler,        //6 - Usage fault
-  unused_handler,             //7
-  unused_handler,             //8
-  unused_handler,             //9
-  unused_handler,             //10
-  svcall_handler,             //11 - Supervisor call
-  debug_monitor_handler,      //12 - Debug monitor
-  unused_handler,             //13
-  pendablesrvreq_handler,     //14 - Pendable request for system service
-  systick_handler,            //15 - System tick timer
+  (handler_t) &__stack_end__,   //0 - Initial stack pointer
+  startup,                      //1 - Initial program counter
+  nmi_handler,                  //2 - Non maskable interrupt
+  hard_fault_handler,           //3 - Hard fault
+  memmanage_fault_handler,      //4 - MemManage fault
+  bus_fault_handler,            //5 - Bus fault
+  usage_fault_handler,          //6 - Usage fault
+  unused_handler,               //7
+  unused_handler,               //8
+  unused_handler,               //9
+  unused_handler,               //10
+  svcall_handler,               //11 - Supervisor call
+  debug_monitor_handler,        //12 - Debug monitor
+  unused_handler,               //13
+  pendablesrvreq_handler,       //14 - Pendable request for system service
+  systick_handler,              //15 - System tick timer
 
   //Non-core vectors.
   dma_channel_0_16_handler,         //16 - DMA channel 0, 16 transfer complete
