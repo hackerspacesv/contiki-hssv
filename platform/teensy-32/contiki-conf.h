@@ -1,0 +1,18 @@
+//+------------------------------------------------------------------------------------------------+
+//| Contiki configuration header for the Teensy 3.2 platform.                                      |
+//|                                                                                                |
+//| Author: Joksan Alvarado.                                                                       |
+//+------------------------------------------------------------------------------------------------+
+
+#ifndef CONTIKI_CONF_H_
+#define CONTIKI_CONF_H_
+
+#include <stdint.h>
+
+typedef uint32_t clock_time_t;
+typedef uint16_t uip_stats_t;
+
+#define CCIF
+#define CLIF
+
+#endif //CONTIKI_CONF_H_
