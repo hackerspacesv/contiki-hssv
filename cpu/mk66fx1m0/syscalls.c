@@ -55,5 +55,12 @@ int _write(int file, char *ptr, int len) {
   if (file == STDOUT_FILENO || file == STDERR_FILENO) {
     for (i = 0; i < len; i++)
       uart_tx(UART0, *ptr++);
+    return len;
+  }
+  else {
+    //If writing to any other file (which is unimplemented), return -1 and set errno to EBADF (bad
+    //file descriptor).
+    errno = EBADF;
+    return -1;
   }
 }

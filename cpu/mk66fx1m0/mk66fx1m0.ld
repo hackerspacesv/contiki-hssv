@@ -10,12 +10,12 @@ MEMORY {
   SRAM  (rw) : ORIGIN = 0x1FFF0000, LENGTH = 256K
 }
 
-/* Entry point function */
-ENTRY(startup)
-
 /* Heap and stack section sizes. Adjust to better fit the application. */
 __heap_size__ = 64K;
 __stack_size__ = 16K;
+
+/* Entry point function */
+ENTRY(startup)
 
 /* Section mapping */
 SECTIONS {
@@ -29,16 +29,34 @@ SECTIONS {
     KEEP(*(.flash_configuration_field))
   } > FLASH
 
-  /* Read only sections (code, data, etc) are allocated in flash */
+  /* Code sections are allocated in flash */
   .text : {
     . = ALIGN(4);
-    *(.text*)
+    *(.text*)       /* Text (code) section and subsections */
     . = ALIGN(4);
-    *(.rodata*)
+    *(.init)        /* Init section */
     . = ALIGN(4);
-    *(.init)
+    *(.fini)        /* Fini section */
     . = ALIGN(4);
-    *(.fini)
+     *(.eh_frame)   /* Exception unwinding and source language information section */
+  } > FLASH
+
+  /* Read only data (constants) are allocated in flash */
+  .rodata : {
+    . = ALIGN(4);
+    *(.rodata*)     /* General read only data section */
+    . = ALIGN(4);
+    *(.init_array)  /* Initialization functions array */
+    . = ALIGN(4);
+    *(.fini_array)  /* Finalization functions array */
+    . = ALIGN(4);
+    *(.jcr)         /* Information used for registering compiled java classes */
+  } > FLASH
+
+  /* Stack unwinding information section is allocated in flash */
+  .ARM.exidx : {
+    . = ALIGN(4);
+    *(.ARM.exidx)   
   } > FLASH
 
   /* Initialized read/write sections are allocated in RAM but loaded in flash */

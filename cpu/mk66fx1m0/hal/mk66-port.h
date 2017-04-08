@@ -59,7 +59,8 @@ struct PORT_type {
 #define PORT_PCR_IRQC_Int_Fall  (10 << 16)
 #define PORT_PCR_IRQC_Int_Both  (11 << 16)
 #define PORT_PCR_IRQC_Int_High  (12 << 16)
-#define PORT_PCR_ISF_Clear      (0 << 24)   //Interrupt status flag
+#define PORT_PCR_ISF_Msk        0x01000000  //Interrupt status flag
+#define PORT_PCR_ISF_Clear      (0 << 24)
 #define PORT_PCR_ISF_Set        (1 << 24)
 
 //Global pin control low and high register bitfields

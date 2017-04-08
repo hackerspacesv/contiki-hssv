@@ -50,7 +50,7 @@ struct WDOG_type {
 #define WDOG_STCTRLH_BYTESEL_0          (0 << 12)   //Select the byte to be tested in byte test mode
 #define WDOG_STCTRLH_BYTESEL_1          (1 << 12)
 #define WDOG_STCTRLH_BYTESEL_2          (2 << 12)
-#define WDOG_STCTRLH_BYTESEL_3          (3 << 13)
+#define WDOG_STCTRLH_BYTESEL_3          (3 << 12)
 #define WDOG_STCTRLH_DISTESTWDOG_Clear  (0 << 14)   //Allows to disable the functional test
 #define WDOG_STCTRLH_DISTESTWDOG_Set    (1 << 14)
 
