@@ -1,11 +1,11 @@
 //+------------------------------------------------------------------------------------------------+
-//| MCG peripheral registers for Kinetis MK66 MCU.                                                 |
+//| MCG peripheral registers for Kinetis MK20 MCU.                                                 |
 //|                                                                                                |
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-#ifndef MK66_MCG_H_
-#define MK66_MCG_H_
+#ifndef MK20_MCG_H_
+#define MK20_MCG_H_
 
 #include <stdint.h>
 
@@ -24,12 +24,6 @@ struct MCG_type {
   uint8_t ATCVL;      //Auto trim compare value low register
   uint8_t C7;         //Control 7 register
   uint8_t C8;         //Control 8 register
-  uint8_t C9;         //Control 9 register
-  uint8_t reserved2;
-  uint8_t C11;        //Control 11 register
-  uint8_t C12;        //Control 12 register
-  uint8_t S2;         //Status 2 register
-  uint8_t T3;         //Test 3 register
 };
 
 #define MCG ((volatile struct MCG_type *) 0x40064000)
@@ -49,7 +43,7 @@ struct MCG_type {
 #define MCG_C1_FRDIV_Div_32_1024    (5 << 3)
 #define MCG_C1_FRDIV_Div_64_1280    (6 << 3)
 #define MCG_C1_FRDIV_Div_128_1536   (7 << 3)
-#define MCG_C1_CLKS_FLL_PLLCS       (0 << 6)  //Clock source select
+#define MCG_C1_CLKS_FLL_PLL         (0 << 6)  //Clock source select
 #define MCG_C1_CLKS_Internal        (1 << 6)
 #define MCG_C1_CLKS_External        (2 << 6)
 
@@ -65,8 +59,6 @@ struct MCG_type {
 #define MCG_C2_RANGE_Low          (0 << 4)  //Frequency range select
 #define MCG_C2_RANGE_High         (1 << 4)
 #define MCG_C2_RANGE_Very_High    (2 << 4)
-#define MCG_C2_FCFTRIM_Clear      (0 << 6)  //Fast internal reference clock fine trim
-#define MCG_C2_FCFTRIM_Set        (1 << 6)
 #define MCG_C2_LOCRE0_Interrupt   (0 << 7)  //Loss of clock reset enable
 #define MCG_C2_LOCRE0_Reset       (1 << 7)
 
@@ -83,56 +75,73 @@ struct MCG_type {
 #define MCG_C4_DMX32_Set          (1 << 7)
 
 //Control 5 register bitfields
-#define MCG_C5_PRDIV_Div_1        (0 << 0)  //PLL external reference divider
-#define MCG_C5_PRDIV_Div_2        (1 << 0)
-#define MCG_C5_PRDIV_Div_3        (2 << 0)
-#define MCG_C5_PRDIV_Div_4        (3 << 0)
-#define MCG_C5_PRDIV_Div_5        (4 << 0)
-#define MCG_C5_PRDIV_Div_6        (5 << 0)
-#define MCG_C5_PRDIV_Div_7        (6 << 0)
-#define MCG_C5_PRDIV_Div_8        (7 << 0)
-#define MCG_C5_PLLSTEN_Disabled   (0 << 5)  //PLL stop enable
+#define MCG_C5_PRDIV0_Div_1       (0 << 0)    //PLL external reference divider
+#define MCG_C5_PRDIV0_Div_2       (1 << 0)
+#define MCG_C5_PRDIV0_Div_3       (2 << 0)
+#define MCG_C5_PRDIV0_Div_4       (3 << 0)
+#define MCG_C5_PRDIV0_Div_5       (4 << 0)
+#define MCG_C5_PRDIV0_Div_6       (5 << 0)
+#define MCG_C5_PRDIV0_Div_7       (6 << 0)
+#define MCG_C5_PRDIV0_Div_8       (7 << 0)
+#define MCG_C5_PRDIV0_Div_9       (8 << 0)
+#define MCG_C5_PRDIV0_Div_10      (9 << 0)
+#define MCG_C5_PRDIV0_Div_11      (10 << 0)
+#define MCG_C5_PRDIV0_Div_12      (11 << 0)
+#define MCG_C5_PRDIV0_Div_13      (12 << 0)
+#define MCG_C5_PRDIV0_Div_14      (13 << 0)
+#define MCG_C5_PRDIV0_Div_15      (14 << 0)
+#define MCG_C5_PRDIV0_Div_16      (15 << 0)
+#define MCG_C5_PRDIV0_Div_17      (16 << 0)
+#define MCG_C5_PRDIV0_Div_18      (17 << 0)
+#define MCG_C5_PRDIV0_Div_19      (18 << 0)
+#define MCG_C5_PRDIV0_Div_20      (19 << 0)
+#define MCG_C5_PRDIV0_Div_21      (20 << 0)
+#define MCG_C5_PRDIV0_Div_22      (21 << 0)
+#define MCG_C5_PRDIV0_Div_23      (22 << 0)
+#define MCG_C5_PRDIV0_Div_24      (23 << 0)
+#define MCG_C5_PRDIV0_Div_25      (24 << 0)
+#define MCG_C5_PLLSTEN_Disabled   (0 << 5)    //PLL stop enable
 #define MCG_C5_PLLSTEN_Enabled    (1 << 5)
-#define MCG_C5_PLLCLKEN_Disabled  (0 << 6)  //PLL clock enable
+#define MCG_C5_PLLCLKEN_Disabled  (0 << 6)    //PLL clock enable
 #define MCG_C5_PLLCLKEN_Enabled   (1 << 6)
 
 //Control 6 register bitfields
-#define MCG_C6_VDIV_Div_16      (0 << 0)    //VCO divider
-#define MCG_C6_VDIV_Div_17      (1 << 0)
-#define MCG_C6_VDIV_Div_18      (2 << 0)
-#define MCG_C6_VDIV_Div_19      (3 << 0)
-#define MCG_C6_VDIV_Div_20      (4 << 0)
-#define MCG_C6_VDIV_Div_21      (5 << 0)
-#define MCG_C6_VDIV_Div_22      (6 << 0)
-#define MCG_C6_VDIV_Div_23      (7 << 0)
-#define MCG_C6_VDIV_Div_24      (8 << 0)
-#define MCG_C6_VDIV_Div_25      (9 << 0)
-#define MCG_C6_VDIV_Div_26      (10 << 0)
-#define MCG_C6_VDIV_Div_27      (11 << 0)
-#define MCG_C6_VDIV_Div_28      (12 << 0)
-#define MCG_C6_VDIV_Div_29      (13 << 0)
-#define MCG_C6_VDIV_Div_30      (14 << 0)
-#define MCG_C6_VDIV_Div_31      (15 << 0)
-#define MCG_C6_VDIV_Div_32      (16 << 0)
-#define MCG_C6_VDIV_Div_33      (17 << 0)
-#define MCG_C6_VDIV_Div_34      (18 << 0)
-#define MCG_C6_VDIV_Div_35      (19 << 0)
-#define MCG_C6_VDIV_Div_36      (20 << 0)
-#define MCG_C6_VDIV_Div_37      (21 << 0)
-#define MCG_C6_VDIV_Div_38      (22 << 0)
-#define MCG_C6_VDIV_Div_39      (23 << 0)
-#define MCG_C6_VDIV_Div_40      (24 << 0)
-#define MCG_C6_VDIV_Div_41      (25 << 0)
-#define MCG_C6_VDIV_Div_42      (26 << 0)
-#define MCG_C6_VDIV_Div_43      (27 << 0)
-#define MCG_C6_VDIV_Div_44      (28 << 0)
-#define MCG_C6_VDIV_Div_45      (29 << 0)
-#define MCG_C6_VDIV_Div_46      (30 << 0)
-#define MCG_C6_VDIV_Div_47      (31 << 0)
+#define MCG_C6_VDIV0_Div_24     (0 << 0)    //VCO divider
+#define MCG_C6_VDIV0_Div_25     (1 << 0)
+#define MCG_C6_VDIV0_Div_26     (2 << 0)
+#define MCG_C6_VDIV0_Div_27     (3 << 0)
+#define MCG_C6_VDIV0_Div_28     (4 << 0)
+#define MCG_C6_VDIV0_Div_29     (5 << 0)
+#define MCG_C6_VDIV0_Div_30     (6 << 0)
+#define MCG_C6_VDIV0_Div_31     (7 << 0)
+#define MCG_C6_VDIV0_Div_32     (8 << 0)
+#define MCG_C6_VDIV0_Div_33     (9 << 0)
+#define MCG_C6_VDIV0_Div_34     (10 << 0)
+#define MCG_C6_VDIV0_Div_35     (11 << 0)
+#define MCG_C6_VDIV0_Div_36     (12 << 0)
+#define MCG_C6_VDIV0_Div_37     (13 << 0)
+#define MCG_C6_VDIV0_Div_38     (14 << 0)
+#define MCG_C6_VDIV0_Div_39     (15 << 0)
+#define MCG_C6_VDIV0_Div_40     (16 << 0)
+#define MCG_C6_VDIV0_Div_41     (17 << 0)
+#define MCG_C6_VDIV0_Div_42     (18 << 0)
+#define MCG_C6_VDIV0_Div_43     (19 << 0)
+#define MCG_C6_VDIV0_Div_44     (20 << 0)
+#define MCG_C6_VDIV0_Div_45     (21 << 0)
+#define MCG_C6_VDIV0_Div_46     (22 << 0)
+#define MCG_C6_VDIV0_Div_47     (23 << 0)
+#define MCG_C6_VDIV0_Div_48     (24 << 0)
+#define MCG_C6_VDIV0_Div_49     (25 << 0)
+#define MCG_C6_VDIV0_Div_50     (26 << 0)
+#define MCG_C6_VDIV0_Div_51     (27 << 0)
+#define MCG_C6_VDIV0_Div_52     (28 << 0)
+#define MCG_C6_VDIV0_Div_53     (29 << 0)
+#define MCG_C6_VDIV0_Div_54     (30 << 0)
+#define MCG_C6_VDIV0_Div_55     (31 << 0)
 #define MCG_C6_CME0_Disabled    (0 << 5)    //Clock monitor enable
 #define MCG_C6_CME0_Enabled     (1 << 5)
 #define MCG_C6_PLLS_FLL         (0 << 6)    //PLL select
-#define MCG_C6_PLLS_PLLCS       (1 << 6)
+#define MCG_C6_PLLS_PLL         (1 << 6)
 #define MCG_C6_LOLIE0_Disabled  (0 << 7)    //Loss of lock interrupt enable
 #define MCG_C6_LOLIE0_Enabled   (1 << 7)
 
@@ -153,7 +162,7 @@ struct MCG_type {
 #define MCG_S_IREFST_Internal     (1 << 4)
 #define MCG_S_PLLST_Msk           0x20      //PLL select status
 #define MCG_S_PLLST_FLL           (0 << 5)
-#define MCG_S_PLLST_PLLCS         (1 << 5)
+#define MCG_S_PLLST_PLL           (1 << 5)
 #define MCG_S_LOCK0_Msk           0x40      //Lock status
 #define MCG_S_LOCK0_Unlocked      (0 << 6)
 #define MCG_S_LOCK0_Locked        (1 << 6)
@@ -184,9 +193,8 @@ struct MCG_type {
 #define MCG_SC_ATME_Enabled       (1 << 7)
 
 //Control 7 register bitfields
-#define MCG_C7_OSCSEL_OSCCLK0   (0 << 0)  //MCG OSC clock select
-#define MCG_C7_OSCSEL_RTC       (1 << 0)
-#define MCG_C7_OSCSEL_OSCCLK1   (2 << 0)
+#define MCG_C7_OSCSEL_OSCCLK  (0 << 0)  //MCG OSC clock select
+#define MCG_C7_OSCSEL_RTC     (1 << 0)
 
 //Control 8 register bitfields
 #define MCG_C8_LOCS1_Msk          0x01      //RTC loss of clock status
@@ -199,20 +207,4 @@ struct MCG_type {
 #define MCG_C8_LOCRE1_Interrupt   (0 << 7)  //Loss of clock reset enable
 #define MCG_C8_LOCRE1_Reset       (1 << 7)
 
-//Control 9 register bitfields
-#define MCG_C9_EXT_PLL_LOCS_Msk     0x00000001  //External PLL loss of clock status
-#define MCG_C9_EXT_PLL_LOCS_Pos     0
-#define MCG_C9_PLL_LOCRE_Interrupt  (0 << 4)    //MCG external PLL loss of clock reset enable
-#define MCG_C9_PLL_LOCRE_Reset      (1 << 4)
-#define MCG_C9_PLL_CME_Disabled     (0 << 5)    //MCG external PLL clock monitor enable
-#define MCG_C9_PLL_CME_Enabled      (1 << 5)
-
-//Control 11 register bitfields
-#define MCG_C11_PLLCS_PLL0      (0 << 4)  //PLL clock select
-#define MCG_C11_PLLCS_EXT_PLL   (1 << 4)
-
-//Status 2 register bitfields
-#define MCG_S2_PLLCST_PLL       (0 << 4)  //PLL clock select status
-#define MCG_S2_PLLCST_EXT_Pll   (1 << 4)
-
-#endif //MK66_MCG_H_
+#endif //MK20_MCG_H_

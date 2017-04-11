@@ -11,6 +11,9 @@
 #include <stdint.h>
 
 #include "mk20-wdog.h"
+#include "mk20-smc.h"
+#include "mk20-osc.h"
+#include "mk20-mcg.h"
 #include "mk20-sim.h"
 
 //Interrupt vector handler function type.
@@ -49,6 +52,47 @@ void startup() {
   WDOG->UNLOCK = WDOG_UNLOCK_Seq_A;
   WDOG->UNLOCK = WDOG_UNLOCK_Seq_B;
   WDOG->STCTRLH = WDOG_STCTRLH_WDOGEN_Disabled | WDOG_STCTRLH_ALLOWUPDATE_Yes;
+
+  //Enable all power modes.
+  SMC->PMPROT = SMC_PMPROT_AVLP_Allowed | SMC_PMPROT_ALLS_Allowed | SMC_PMPROT_AVLLS_Allowed;
+
+  //Configure the 16MHz external oscillator.
+  OSC->CR = OSC_CR_ERCLKEN_Enabled | OSC_CR_SC2P_Enabled | OSC_CR_SC8P_Enabled;
+  MCG->C2 = MCG_C2_RANGE_Very_High | MCG_C2_HGO_Low_Power | MCG_C2_EREFS_Oscillator;
+
+  //Switch to FBE (FLL bypassed external) mode while changing the reference to external. This causes
+  //the external oscillator to start up.
+  MCG->C1 = MCG_C1_CLKS_External | MCG_C1_FRDIV_Div_16_512 | MCG_C1_IREFS_External;
+  //Note: FRDIV is set to 512 just to set an input frequency of 16MHz/512 = 31.25KHz to the FLL
+  //(which requires a value around 32.768KHz). It's not really used.
+
+  //Wait for the system clocks to transition to the new state.
+  while ((MCG->S & MCG_S_OSCINIT0_Msk) != MCG_S_OSCINIT0_Ready);  //Wait for external oscillator
+  while ((MCG->S & MCG_S_IREFST_Msk) != MCG_S_IREFST_External);   //Wait for reference switch
+  while ((MCG->S & MCG_S_CLKST_Msk) != MCG_S_CLKST_External);     //Wait for system clock switch
+
+  //We're running on the external crystal now. Set the PLL external reference divider to divide by
+  //8, to get an input reference of 2MHz.
+  MCG->C5 = MCG_C5_PRDIV0_Div_8;
+
+  //Transition to PBE (PLL bypassed external) mode. This causes to PLL to start up. Set the
+  //multiplier to 36. Final frequency will be 2MHz * 36 = 72MHz.
+  MCG->C6 = MCG_C6_PLLS_PLL | MCG_C6_VDIV0_Div_36;
+
+  //Wait for the PLL to become ready.
+  while ((MCG->S & MCG_S_PLLST_Msk) != MCG_S_PLLST_PLL);      //Wait for the PLL to be selected
+  while ((MCG->S & MCG_S_LOCK0_Msk) != MCG_S_LOCK0_Locked);   //Wait for the PLL to lock
+
+  //Configure all prescalers. Core runs at 72MHz, bus runs at 36MHz and flash runs at 24MHz.
+  SIM->CLKDIV1 = ((0 << SIM_CLKDIV1_OUTDIV1_Pos) & SIM_CLKDIV1_OUTDIV1_Msk) |   //72 / 1 = 72MHz
+                 ((1 << SIM_CLKDIV1_OUTDIV2_Pos) & SIM_CLKDIV1_OUTDIV2_Msk) |   //72 / 2 = 36MHz
+                 ((2 << SIM_CLKDIV1_OUTDIV4_Pos) & SIM_CLKDIV1_OUTDIV4_Msk);    //72 / 3 = 24MHz
+
+  //Transition into PEE (PLL engaged external) mode. Keep the FRDIV and IRFEFS settings unchanged.
+  MCG->C1 = MCG_C1_CLKS_FLL_PLL | MCG_C1_FRDIV_Div_16_512 | MCG_C1_IREFS_External;
+
+  //Wait for the PLL to be selected as a system clock source.
+  while ((MCG->S & MCG_S_CLKST_Msk) != MCG_S_CLKST_PLL);
 
   //Enable the clocks of all ports.
   SIM->SCGC5 = SIM_SCGC5_PORTA_Enabled | SIM_SCGC5_PORTB_Enabled | SIM_SCGC5_PORTC_Enabled |
