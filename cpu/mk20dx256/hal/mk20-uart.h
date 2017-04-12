@@ -1,11 +1,11 @@
 //+------------------------------------------------------------------------------------------------+
-//| UART peripheral registers for Kinetis MK66 MCU.                                                |
+//| UART peripheral registers for Kinetis MK20 MCU.                                                |
 //|                                                                                                |
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-#ifndef MK66_UART_H_
-#define MK66_UART_H_
+#ifndef MK20_UART_H_
+#define MK20_UART_H_
 
 #include <stdint.h>
 
@@ -42,19 +42,29 @@ struct UART_type {
   uint8_t WF7816;         //UART 7816 wait FD register
   uint8_t ET7816;         //UART 7816 error threshold register
   uint8_t TL7816;         //UART 7816 transmit length register
-  uint8_t reserved2[26];
-  uint8_t AP7816A_T0;     //UART 7816 ATR duration timer register A
-  uint8_t AP7816B_T0;     //UART 7816 ATR duration timer register B
-  uint8_t WP7816A_T0_T1;  //UART 7816 wait parameter register A
-  uint8_t WP7816B_T0_T1;  //UART 7816 wait parameter register B
-  uint8_t WGP7816_T1;     //UART 7816 wait and guard parameter register
-  uint8_t WP7816C_T1;     //UART 7816 wait parameter register C
+  uint8_t reserved2;
+  uint8_t C6;             //UART CEA709.1-B control register 6
+  uint8_t PCTH;           //UART CEA709.1-B packet cycle time counter high
+  uint8_t PCTL;           //UART CEA709.1-B packet cycle time counter low
+  uint8_t B1T;            //UART CEA709.1-B Beta1 timer
+  uint8_t SDTH;           //UART CEA709.1-B secondary delay timer high
+  uint8_t SDTL;           //UART CEA709.1-B secondary delay timer low
+  uint8_t PRE;            //UART CEA709.1-B preamble
+  uint8_t TPL;            //UART CEA709.1-B transmit packet length
+  uint8_t IE;             //UART CEA709.1-B interrupt enable register
+  uint8_t WB;             //UART CEA709.1-B WBASE
+  uint8_t S3;             //UART CEA709.1-B status register 3
+  uint8_t S4;             //UART CEA709.1-B status register 4
+  uint8_t RPL;            //UART CEA709.1-B received packet length
+  uint8_t RPREL;          //UART CEA709.1-B received preamble length
+  uint8_t CPW;            //UART CEA709.1-B collision pulse width
+  uint8_t RIDT;           //UART CEA709.1-B receive indeterminate time
+  uint8_t TIDT;           //UART CEA709.1-B transmit indeterminate time
 };
 
 #define UART0 ((volatile struct UART_type *) 0x4006A000)
 #define UART1 ((volatile struct UART_type *) 0x4006B000)
 #define UART2 ((volatile struct UART_type *) 0x4006C000)
-#define UART3 ((volatile struct UART_type *) 0x4006D000)
 #define UART4 ((volatile struct UART_type *) 0x400EA000)
 
 //UART baud rate register high bitfields
@@ -282,8 +292,6 @@ struct UART_type {
 #define UART_IE7816_TXTE_Enabled      (1 << 1)
 #define UART_IE7816_GTVE_Disabled     (0 << 2)  //Guard timer violated interrupt enable
 #define UART_IE7816_GTVE_Enabled      (1 << 2)
-#define UART_IE7816_ADTE_Disabled     (0 << 3)  //ATR duration timer interrupt enable
-#define UART_IE7816_ADTE_Enabled      (1 << 3)
 #define UART_IE7816_INITDE_disabled   (0 << 4)  //Initial character detected interrupt enable
 #define UART_IE7816_INITDE_Enaabled   (1 << 4)
 #define UART_IE7816_BWTE_Disabled     (0 << 5)  //Block wait timer interrupt enable
@@ -303,9 +311,6 @@ struct UART_type {
 #define UART_IS7816_GTV_Msk       0x04      //Guard timer violated interrupt
 #define UART_IS7816_GTV_Clear     (0 << 2)
 #define UART_IS7816_GTV_Set       (1 << 2)
-#define UART_IS7816_ADT_Msk       0x08      //ATR duration time interrupt
-#define UART_IS7816_ADT_Clear     (0 << 3)
-#define UART_IS7816_ADT_Set       (1 << 3)
 #define UART_IS7816_INITD_Msk     0x10      //Initial character detected interrupt
 #define UART_IS7816_INITD_Clear   (0 << 4)
 #define UART_IS7816_INITD_Set     (1 << 4)
@@ -325,14 +330,72 @@ struct UART_type {
 #define UART_ET7816_TXTHRESHOLD_Msk   0xF0  //Transmit NACK threshold
 #define UART_ET7816_TXTHRESHOLD_Pos   4
 
-//UART 7816 wait and guard parameter register
-#define UART_WGP7816_T1_BGI_Msk   0x0F  //Block guard time integer
-#define UART_WGP7816_T1_BGI_Pos   0
-#define UART_WGP7816_T1_CWI1_Msk  0xF0  //Character wait time integer 1
-#define UART_WGP7816_T1_CWI1_Pos  4
+//UART CEA709.1-B control register 6 bitfields
+#define UART_C6_CP_Low          (0 << 4)  //Collision signal polarity
+#define UART_C6_CP_High         (1 << 4)
+#define UART_C6_CE_Disabled     (0 << 5)  //Collision enable
+#define UART_C6_CE_Enabled      (1 << 5)
+#define UART_C6_TX709_Disabled  (0 << 6)  //CEA709.1-B transmit enable
+#define UART_C6_TX709_Enabled   (1 << 6)
+#define UART_C6_EN709_Disabled  (0 << 7)  //EN709
+#define UART_C6_EN709_Enabled   (1 << 7)
 
-//UART 7816 wait parameter register C
-#define UART_WP7816C_T1_CWI2_Msk  0x1F  //Character wait time integer 2
-#define UART_WP7816C_T1_CWI2_Pos  0
+//UART CEA709.1-B interrupt enable register bitfields
+#define UART_IE_TXFIE_Disabled    (0 << 0)  //Transmission fail interrupt enable
+#define UART_IE_TXFIE_Enabled     (1 << 0)
+#define UART_IE_PSIE_Disabled     (0 << 1)  //Preamble start interrupt enable
+#define UART_IE_PSIE_Enabled      (1 << 1)
+#define UART_IE_PCTEIE_Disabled   (0 << 2)  //Packet cycle timer interrupt enable
+#define UART_IE_PCTEIE_Enabled    (1 << 2)
+#define UART_IE_PTXIE_Disabled    (0 << 3)  //Packet transmitted interrupt enable
+#define UART_IE_PTXIE_Enabled     (1 << 3)
+#define UART_IE_PRXIE_Disabled    (0 << 4)  //Packet received interrupt enable
+#define UART_IE_PRXIE_Enabled     (1 << 4)
+#define UART_IE_ISDIE_Disabled    (0 << 5)  //Initial sync detection interrupt enable
+#define UART_IE_ISDIE_Enabled     (1 << 5)
+#define UART_IE_WBEIE_Disabled    (0 << 6)  //WBASE expired interrupt enable
+#define UART_IE_WBEIE_Enabled     (1 << 6)
 
-#endif //MK66_UART_H_
+//UART CEA709.1-B status register 3 bitfields
+#define UART_S3_TXFF_Msk      0x01      //Transmission fail flag
+#define UART_S3_TXFF_Clear    (0 << 0)
+#define UART_S3_TXFF_Set      (1 << 0)
+#define UART_S3_PSF_Msk       0x02      //Preamble start flag
+#define UART_S3_PSF_Clear     (0 << 1)
+#define UART_S3_PSF_Set       (1 << 1)
+#define UART_S3_PCTEF_Msk     0x04      //Packet cycle timer expired flag
+#define UART_S3_PCTEF_Clear   (0 << 2)
+#define UART_S3_PCTEF_Set     (1 << 2)
+#define UART_S3_PTXF_Msk      0x08      //Packet transmitted flag
+#define UART_S3_PTXF_Clear    (0 << 3)
+#define UART_S3_PTXF_Set      (1 << 3)
+#define UART_S3_PRXF_Msk      0x10      //Packet received flag
+#define UART_S3_PRXF_Clear    (0 << 4)
+#define UART_S3_PRXF_Set      (1 << 4)
+#define UART_S3_ISD_Msk       0x20      //Initial sync detect
+#define UART_S3_ISD_Clear     (0 << 5)
+#define UART_S3_ISD_Set       (1 << 5)
+#define UART_S3_WBEF_Msk      0x40      //Wbase expired flag
+#define UART_S3_WBEF_Clear    (0 << 6)
+#define UART_S3_WBEF_Set      (1 << 6)
+#define UART_S3_PEF_Msk       0x80      //Preamble error flag
+#define UART_S3_PEF_Clear     (0 << 7)
+#define UART_S3_PEF_Set       (1 << 7)
+
+//UART CEA709.1-B status register 4 bitfields
+#define UART_S4_FE_Msk        0x01      //Framing error
+#define UART_S4_FE_Clear      (0 << 0)
+#define UART_S4_FE_Set        (1 << 0)
+#define UART_S4_ILCV_Msk      0x02      //Improper line code violation
+#define UART_S4_ILCV_Clear    (0 << 1)
+#define UART_S4_ILCV_Set      (1 << 1)
+#define UART_S4_CDET_Msk      0x0C      //CDET
+#define UART_S4_CDET_NoCol    (0 << 2)
+#define UART_S4_CDET_ColPre   (1 << 2)
+#define UART_S4_CDET_ColDat   (2 << 2)
+#define UART_S4_CDET_ColLCV   (3 << 2)
+#define UART_S4_INITF_Msk     0x10      //Initial synchronization fail flag
+#define UART_S4_INITF_Clear   (0 << 4)
+#define UART_S4_INITF_Set     (1 << 4)
+
+#endif //MK20_UART_H_
