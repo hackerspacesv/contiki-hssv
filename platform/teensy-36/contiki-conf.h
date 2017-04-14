@@ -9,6 +9,8 @@
 
 #include <stdint.h>
 
+#define CLOCK_CONF_SECOND 128
+
 typedef uint32_t clock_time_t;
 typedef uint16_t uip_stats_t;
 

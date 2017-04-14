@@ -18,11 +18,11 @@
 #include "contiki.h"
 
 #include "mk66-port.h"
-#include "mk66-gpio.h"
 #include "uart.h"
 
 void main() {
-  volatile uint32_t i;
+  //Initialize the clock library, including timers.
+  clock_init();
 
   //Configure the port multiplexing to use the UART0 alternate function on pins PTB16 and PTB17,
   //then initialize the UART0 peripheral (used for standard output).
@@ -33,25 +33,22 @@ void main() {
   //Print the operating system version.
   PRINTF("Starting %s\n", CONTIKI_VERSION_STRING);
 
-  //This is just an simple test to check that the toolchain is correctly generating code and the
-  //microcontroller operates correctly.
-  PORTC->PCR[5] = PORT_PCR_MUX_Gpio;
-  GPIOC->PDDR |= 1 << 5;
-  GPIOC->PSOR = 1 << 5;
-
-  //Blink the LED to confirm that the system is running properly.
-  for (;;) {
-    GPIOC->PSOR = 1 << 5;
-    for (i = 0; i < 2000000; i++);
-    GPIOC->PCOR = 1 << 5;
-    for (i = 0; i < 2000000; i++);
-  }
-
-/*
+  //Initialize system processes.
   process_init();
+  process_start(&etimer_process, NULL);
+  ctimer_init();
 
+  //Automatically start user processes.
+  autostart_start(autostart_processes);
+
+  //Run the system.
   for (;;) {
-    process_run();
+    int n;
+    do {
+      //watchdog_periodic();  //TODO: Implement watchdog timer library.
+      n = process_run();
+    } while (n > 0);
+
+    //TODO: Call sleep function here. Keep power consumption low.
   }
-*/
 }
