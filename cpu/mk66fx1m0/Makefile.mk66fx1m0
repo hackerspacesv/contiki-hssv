@@ -25,7 +25,7 @@ LDFLAGS += -gc-sections -T$(CONTIKI_CPU)/mk66fx1m0.ld -lc
 LDFLAGS += $(CPUFLAGS)
 
 #Configure the CPU path and source files.
-CONTIKI_CPU_DIRS += . hal dev $(CONTIKI)/cpu/arm/common/CMSIS
+CONTIKI_CPU_DIRS += . hal dev ../../contiki/cpu/arm/common/CMSIS
 CONTIKI_SOURCEFILES += mk66-startup.c uart.c
 
 #Override the link rule so gcc can be called with -specs instead of ld and also generate a .hex file
