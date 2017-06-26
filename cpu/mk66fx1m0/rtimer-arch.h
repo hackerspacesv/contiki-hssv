@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------------------------------------+
-//| Architecture implementation header for contiki's rtimer library.                               |
+//| Platform implementation header for contiki's rtimer library.                                   |
 //|                                                                                                |
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+

@@ -1,0 +1,13 @@
+#+-------------------------------------------------------------------------------------------------+
+#| Teensy LC platform makefile.                                                                    |
+#|                                                                                                 |
+#| Author: Joksan Alvarado.                                                                        |
+#+-------------------------------------------------------------------------------------------------+
+
+#Configure the target paths and source files.
+CONTIKI_TARGET_DIRS += .
+CONTIKI_SOURCEFILES += contiki-main.c
+
+#Include the CPU makefile.
+CONTIKI_CPU = $(CONTIKI)/../cpu/mkl26z64
+include $(CONTIKI_CPU)/Makefile.mkl26z64

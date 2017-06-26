@@ -1,7 +1,17 @@
 //+------------------------------------------------------------------------------------------------+
-//| Platform implementation header for contiki's rtimer library.                                   |
+//| Architecture implementation header for contiki's preemptive multithreading library.            |
 //|                                                                                                |
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-//This header is an stub for now. It currently exists to allow clean compilation.
+#ifndef MTARCH_H_
+#define MTARCH_H_
+
+//Contiki's preemptive multithreading library isn't implemented on this platform. This is just an
+//stub to cause the code to compile cleanly.
+
+struct mtarch_thread {
+  unsigned char *sp;
+};
+
+#endif //MTARCH_H_
