@@ -12,11 +12,12 @@ This is the current list of the platforms and microcontrollers supported
 on this repository:
 
 - PJRC's [Teensy 3.6](https://www.pjrc.com/store/teensy36.html) based on the [Freescale Kinetis](http://www.nxp.com/products/microcontrollers-and-processors/arm-processors/kinetis-cortex-m-mcus/k-series-performance-m4:KINETIS_K_SERIES) mk66fx1m0
+- PJRC's [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) based on the [Freescale Kinetis](http://www.nxp.com/products/microcontrollers-and-processors/arm-processors/kinetis-cortex-m-mcus/k-series-performance-m4:KINETIS_K_SERIES) mk20dx256
+- PJRC's [Teensy LC](https://www.pjrc.com/store/teensylc.html) based on the [Freescale Kinetis](http://www.nxp.com/products/microcontrollers-and-processors/arm-processors/kinetis-cortex-m-mcus/l-series-ultra-low-power-m0-plus:KINETIS_L_SERIES) mkl26z64
 
 ## Planned Support
 This is the list of future (planned) implementations:
 - Sparkfun [nRF52382](https://www.sparkfun.com/products/13990) breakout board based on the [Nordic nRF52832](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF52832)
-- PJRC's [Teensy LC](https://www.pjrc.com/store/teensy36.html) based on the [Freescale Kinetis](http://www.nxp.com/products/microcontrollers-and-processors/arm-processors/kinetis-cortex-m-mcus/k-series-performance-m4:KINETIS_K_SERIES) mkl26z64vft4
 
 ## Credits
 Thanks to Joksan Alvarado for initiating the support for new platforms on Contiki.
