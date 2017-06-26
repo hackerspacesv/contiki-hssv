@@ -48,7 +48,7 @@ void startup() {
   const uint32_t *flash;
   uint32_t *sram;
 
-  //Disable the watcdog.
+  //Disable the watchdog.
   WDOG->UNLOCK = WDOG_UNLOCK_Seq_A;
   WDOG->UNLOCK = WDOG_UNLOCK_Seq_B;
   WDOG->STCTRLH = WDOG_STCTRLH_WDOGEN_Disabled | WDOG_STCTRLH_ALLOWUPDATE_Yes;
@@ -196,9 +196,9 @@ void __attribute__((weak, alias("unused_handler"))) pdb_handler();
 void __attribute__((weak, alias("unused_handler"))) usb_otg_handler();
 void __attribute__((weak, alias("unused_handler"))) usb_charger_detect_handler();
 void __attribute__((weak, alias("unused_handler"))) dac_0_handler();
-void __attribute__((weak, alias("unused_handler"))) tsi_handler();
+void __attribute__((weak, alias("unused_handler"))) tsi_0_handler();
 void __attribute__((weak, alias("unused_handler"))) mcg_handler();
-void __attribute__((weak, alias("unused_handler"))) low_power_timer_handler();
+void __attribute__((weak, alias("unused_handler"))) lptmr_0_handler();
 void __attribute__((weak, alias("unused_handler"))) port_a_handler();
 void __attribute__((weak, alias("unused_handler"))) port_b_handler();
 void __attribute__((weak, alias("unused_handler"))) port_c_handler();
@@ -313,9 +313,9 @@ handler_t vectors[111] = {
   unused_handler,                   //96
   dac_0_handler,                    //97 - DAC 0
   unused_handler,                   //98
-  tsi_handler,                      //99 - TSI
+  tsi_0_handler,                    //99 - TSI 0
   mcg_handler,                      //100 - MCG
-  low_power_timer_handler,          //101 - Low power timer
+  lptmr_0_handler,                  //101 - Low power timer
   unused_handler,                   //102
   port_a_handler,                   //103 - Port A pin detect
   port_b_handler,                   //104 - Port B pin detect

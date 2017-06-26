@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-#include <contiki.h>
+#include "contiki.h"
 
 static struct ctimer timer;
 

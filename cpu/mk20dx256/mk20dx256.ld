@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------------------------*/
-/* Linker script for the Kinetis MK66FX1M0 microcontroller.                                       */
+/* Linker script for the Kinetis MK20DX256 microcontroller.                                       */
 /*                                                                                                */
 /* Author: Joksan Alvarado.                                                                       */
 /*------------------------------------------------------------------------------------------------*/

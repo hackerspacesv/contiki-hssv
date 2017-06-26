@@ -7,12 +7,12 @@
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-#include <clock.h>
-#include <etimer.h>
+#include "clock.h"
+#include "etimer.h"
 
-#include <mk66.h>
-#include <mk66-sim.h>
-#include <mk66-pit.h>
+#include "mk66.h"
+#include "mk66-sim.h"
+#include "mk66-pit.h"
 
 //Variables used for tracking system time.
 static volatile clock_time_t tick_count = 0;      //Amount of PIT overflow ticks elapsed since boot
@@ -24,7 +24,7 @@ void clock_init(void) {
   SIM->SCGC6 |= SIM_SCGC6_PIT_Enabled;                          //Enable the module clock
   PIT->LDVAL0 = (60000000 / CLOCK_SECOND) - 1;                  //Set the period
   PIT->TCTRL0 = PIT_TCTRL_TEN_Enabled | PIT_TCTRL_TIE_Enabled;  //Enable PIT0 and its interrupt
-  PIT->MCR = PIT_MCR_MDIS_Enabled;                              //Enable the PIT
+  PIT->MCR = PIT_MCR_MDIS_Enabled | PIT_MCR_FRZ_DbgStop;        //Enable the PIT
 
   //Configure the interrupt in the NVIC.
   NVIC_SetPriority(PIT_0_IRQn, 8);  //Set a middle priority level
@@ -89,7 +89,7 @@ void clock_delay_usec(uint16_t dt) {
 
 void pit_0_handler() {
   //Clear the interrupt flag.
-  PIT->TFLG0 |= PIT_TFLG0_TIF_Set;
+  PIT->TFLG0 |= PIT_TFLG_TIF_Set;
 
   //Increase the time count.
   tick_count++;

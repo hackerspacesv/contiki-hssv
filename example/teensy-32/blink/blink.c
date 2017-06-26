@@ -4,10 +4,10 @@
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-#include <contiki.h>
+#include "contiki.h"
 
-#include <mk20-port.h>
-#include <mk20-gpio.h>
+#include "mk20-port.h"
+#include "mk20-gpio.h"
 
 PROCESS(blink, "Blink process");
 

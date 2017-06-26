@@ -47,8 +47,8 @@ struct PIT_type {
 #define PIT_TCTRL_CHN_Chained     (1 << 2)
 
 //Timer flag register bitfields
-#define PIT_TFLG0_TIF_Msk     0x01      //Timer interrupt flag
-#define PIT_TFLG0_TIF_Clear   (0 << 0)
-#define PIT_TFLG0_TIF_Set     (1 << 0)
+#define PIT_TFLG_TIF_Msk    0x01      //Timer interrupt flag
+#define PIT_TFLG_TIF_Clear  (0 << 0)
+#define PIT_TFLG_TIF_Set    (1 << 0)
 
 #endif //MK20_PIT_H_

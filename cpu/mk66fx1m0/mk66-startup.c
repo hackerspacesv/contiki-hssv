@@ -49,7 +49,7 @@ void startup() {
   const uint32_t *flash;
   uint32_t *sram;
 
-  //Disable the watcdog.
+  //Disable the watchdog.
   WDOG->UNLOCK = WDOG_UNLOCK_Seq_A;
   WDOG->UNLOCK = WDOG_UNLOCK_Seq_B;
   WDOG->STCTRLH = WDOG_STCTRLH_WDOGEN_Disabled | WDOG_STCTRLH_ALLOWUPDATE_Yes;
@@ -201,7 +201,7 @@ void __attribute__((weak, alias("unused_handler"))) usbfs_otg_handler();
 void __attribute__((weak, alias("unused_handler"))) usbfs_charger_detect_handler();
 void __attribute__((weak, alias("unused_handler"))) dac_0_handler();
 void __attribute__((weak, alias("unused_handler"))) mcg_handler();
-void __attribute__((weak, alias("unused_handler"))) low_power_timer_handler();
+void __attribute__((weak, alias("unused_handler"))) lptmr_0_handler();
 void __attribute__((weak, alias("unused_handler"))) port_a_handler();
 void __attribute__((weak, alias("unused_handler"))) port_b_handler();
 void __attribute__((weak, alias("unused_handler"))) port_c_handler();
@@ -324,7 +324,7 @@ handler_t vectors[116] = {
   unused_handler,                   //71
   dac_0_handler,                    //72 - DAC 0
   mcg_handler,                      //73 - MCG
-  low_power_timer_handler,          //74 - Low power timer
+  lptmr_0_handler,                  //74 - Low power timer
   port_a_handler,                   //75 - Port A pin detect
   port_b_handler,                   //76 - Port B pin detect
   port_c_handler,                   //77 - Port C pin detect
