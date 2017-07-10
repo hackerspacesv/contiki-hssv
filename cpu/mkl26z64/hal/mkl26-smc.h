@@ -1,18 +1,18 @@
 //+------------------------------------------------------------------------------------------------+
-//| SMC peripheral registers for Kinetis MK20 MCU.                                                 |
+//| SMC peripheral registers for Kinetis MKL26 MCU.                                                |
 //|                                                                                                |
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-#ifndef MK20_SMC_H_
-#define MK20_SMC_H_
+#ifndef MKL26_SMC_H_
+#define MKL26_SMC_H_
 
 #include <stdint.h>
 
 struct SMC_type {
   uint8_t PMPROT;     //Power mode protection register
   uint8_t PMCTRL;     //Power mode control register
-  uint8_t VLLSCTRL;   //VLLS control register
+  uint8_t STOPCTRL;   //Stop control register
   uint8_t PMSTAT;     //Power mode status register
 };
 
@@ -36,10 +36,15 @@ struct SMC_type {
 #define SMC_PMCTRL_RUNM_RUN       (0 << 5)  //Run mode control
 #define SMC_PMCTRL_RUNM_VLPR      (2 << 5)
 
-//VLLS control register bitfields
-#define SMC_VLLSCTRL_VLLSM_VLLS1  (1 << 0)  //VLLS mode control
-#define SMC_VLLSCTRL_VLLSM_VLLS2  (2 << 0)
-#define SMC_VLLSCTRL_VLLSM_VLLS3  (3 << 0)
+//Stop control register bitfields
+#define SMC_STOPCTRL_VLLSM_VLLS0      (0 << 0)  //VLLS mode control
+#define SMC_STOPCTRL_VLLSM_VLLS1      (1 << 0)
+#define SMC_STOPCTRL_VLLSM_VLLS3      (3 << 0)
+#define SMC_STOPCTRL_PORPO_Enabled    (0 << 5)  //POR power option
+#define SMC_STOPCTRL_PORPO_Disabled   (1 << 5)
+#define SMC_STOPCTRL_PSTOPO_STOP      (0 << 6)  //Partial stop option
+#define SMC_STOPCTRL_PSTOPO_PSTOP1    (1 << 6)
+#define SMC_STOPCTRL_PSTOPO_PSTOP2    (2 << 6)
 
 //Power mode status register bitfields
 #define SMC_PMSTAT_RUN    (1 << 0)  //Power mode status
@@ -50,4 +55,4 @@ struct SMC_type {
 #define SMC_PMSTAT_LLS    (1 << 5)
 #define SMC_PMSTAT_VLLS   (1 << 6)
 
-#endif //MK20_SMC_H_
+#endif //MKL26_SMC_H_

@@ -58,7 +58,7 @@ void startup() {
 
   //Configure the 16MHz external oscillator.
   OSC->CR = OSC_CR_ERCLKEN_Enabled | OSC_CR_SC2P_Enabled | OSC_CR_SC8P_Enabled;
-  MCG->C2 = MCG_C2_RANGE_Very_High | MCG_C2_HGO_Low_Power | MCG_C2_EREFS_Oscillator;
+  MCG->C2 = MCG_C2_RANGE0_Very_High | MCG_C2_HGO0_Low_Power | MCG_C2_EREFS_Oscillator;
 
   //Switch to FBE (FLL bypassed external) mode while changing the reference to external. This causes
   //the external oscillator to start up.

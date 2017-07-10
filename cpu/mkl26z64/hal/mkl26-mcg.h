@@ -1,11 +1,11 @@
 //+------------------------------------------------------------------------------------------------+
-//| MCG peripheral registers for Kinetis MK20 MCU.                                                 |
+//| MCG peripheral registers for Kinetis MKL26 MCU.                                                |
 //|                                                                                                |
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-#ifndef MK20_MCG_H_
-#define MK20_MCG_H_
+#ifndef MKL26_MCG_H_
+#define MKL26_MCG_H_
 
 #include <stdint.h>
 
@@ -24,6 +24,8 @@ struct MCG_type {
   uint8_t ATCVL;      //Auto trim compare value low register
   uint8_t C7;         //Control 7 register
   uint8_t C8;         //Control 8 register
+  uint8_t C9;         //Control 9 register
+  uint8_t C10;        //Control 10 register
 };
 
 #define MCG ((volatile struct MCG_type *) 0x40064000)
@@ -59,6 +61,8 @@ struct MCG_type {
 #define MCG_C2_RANGE0_Low         (0 << 4)  //Frequency range select
 #define MCG_C2_RANGE0_High        (1 << 4)
 #define MCG_C2_RANGE0_Very_High   (2 << 4)
+#define MCG_C2_FCFTRIM_Clear      (0 << 6)  //Fast internal reference clock fine trim
+#define MCG_C2_FCFTRIM_Set        (1 << 6)
 #define MCG_C2_LOCRE0_Interrupt   (0 << 7)  //Loss of clock reset enable
 #define MCG_C2_LOCRE0_Reset       (1 << 7)
 
@@ -197,14 +201,13 @@ struct MCG_type {
 #define MCG_C7_OSCSEL_RTC     (1 << 0)
 
 //Control 8 register bitfields
-#define MCG_C8_LOCS1_Msk          0x01      //RTC loss of clock status
-#define MCG_C8_LOCS1_Clear        (0 << 0)
-#define MCG_C8_LOCS1_Set          (1 << 0)
-#define MCG_C8_CME1_Disabled      (0 << 5)  //Clock monitor enable 1
-#define MCG_C8_CME1_Enabled       (1 << 5)
 #define MCG_C8_LOLRE_Interrupt    (0 << 6)  //PLL loss of lock reset enable
 #define MCG_C8_LOLRE_Reset        (1 << 6)
-#define MCG_C8_LOCRE1_Interrupt   (0 << 7)  //Loss of clock reset enable
-#define MCG_C8_LOCRE1_Reset       (1 << 7)
 
-#endif //MK20_MCG_H_
+//Control 9 register bitfields
+//(All fields reserved)
+
+//Control 10 register bitfields
+//(All fields reserved)
+
+#endif //MKL26_MCG_H_
