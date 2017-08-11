@@ -231,9 +231,9 @@ struct SIM_type {
 
 //COP control register bitfields
 #define SIM_COPC_COPW_Normal          (0 << 0)  //COP windowed mode
-#define SIM_COPC_COPW_Windowed        (0 << 1)
+#define SIM_COPC_COPW_Windowed        (1 << 0)
 #define SIM_COPC_COPCLKS_Int_1kHz     (0 << 1)  //COP Clock Select
-#define SIM_COPC_COPCLKS_Bus_Clok     (1 << 1)
+#define SIM_COPC_COPCLKS_Bus_Clock    (1 << 1)
 #define SIM_COPC_COPT_Disabled        (0 << 2)  //COP watchdog timeout
 #define SIM_COPC_COPT_5_LPO_13_Bus    (1 << 2)
 #define SIM_COPC_COPT_8_LPO_16_Bus    (2 << 2)

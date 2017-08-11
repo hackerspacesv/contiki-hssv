@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------------------------------------+
-//| ARM Cortex m4f core configuration header for the Kinetis MK20 MCU.                             |
+//| ARM Cortex-M4 core configuration header for the Kinetis MK20 MCU.                              |
 //|                                                                                                |
 //| This header defines vector number enumerations and core configuration options required by      |
 //| the CMSIS in order to provide core support.                                                    |
@@ -27,8 +27,8 @@ typedef enum IRQn
   DmaChannel_0_IRQn           = 0,
   DmaChannel_1_IRQn           = 1,
   DmaChannel_2_IRQn           = 2,
-  DmaChannel_3_IRQn           = 4,
-  DmaChannel_4_IRQn           = 3,
+  DmaChannel_3_IRQn           = 3,
+  DmaChannel_4_IRQn           = 4,
   DmaChannel_5_IRQn           = 5,
   DmaChannel_6_IRQn           = 6,
   DmaChannel_7_IRQn           = 7,
@@ -86,7 +86,7 @@ typedef enum IRQn
   DAC_0_IRQn                  = 81,
   TSI_IRQn                    = 83,
   MCG_IRQn                    = 84,
-  LowPowerTimer_IRQn          = 85,
+  LPTMR_0_IRQn                = 85,
   PORT_A_IRQn                 = 87,
   PORT_B_IRQn                 = 88,
   PORT_C_IRQn                 = 89,
@@ -95,7 +95,7 @@ typedef enum IRQn
   SoftwareInterrupt_IRQn      = 94,
 } IRQn_Type;
 
-//ARM Cortex m4f core configurations.
+//ARM Cortex-M4 core configurations.
 #define __FPU_PRESENT           0
 #define __MPU_PRESENT           0
 #define __NVIC_PRIO_BITS        4

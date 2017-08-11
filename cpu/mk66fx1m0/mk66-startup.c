@@ -304,7 +304,7 @@ handler_t vectors[116] = {
   uart_2_status_handler,            //51 - UART 2, all status interrupts
   uart_2_error_handler,             //52 - UART 2, all error interrupts
   uart_3_status_handler,            //53 - UART 3, all status interrupts
-  uart_4_error_handler,             //54 - UART 3, all error interrupts
+  uart_3_error_handler,             //54 - UART 3, all error interrupts
   adc_0_handler,                    //55 - ADC 0
   cmp_0_handler,                    //56 - CMP 0
   cmp_1_handler,                    //57 - CMP 1

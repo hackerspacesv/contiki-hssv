@@ -10,8 +10,13 @@
 #include "contiki.h"
 
 void main() {
+  //Initialize the clock library, including timers.
+  clock_init();
+
   //Initialize system processes.
   process_init();
+  process_start(&etimer_process, NULL);
+  ctimer_init();
 
   //Automatically start user processes.
   autostart_start(autostart_processes);

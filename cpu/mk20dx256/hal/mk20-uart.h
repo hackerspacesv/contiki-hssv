@@ -78,7 +78,7 @@ struct UART_type {
 #define UART_BDH_LBKDIE_Enabled     (1 << 7)
 
 //UART baud rate register low bitfields
-#define UART_BDL_SBR_Msk  0xFF  // UART baud rate bits (low)
+#define UART_BDL_SBR_Msk  0xFF  //UART baud rate bits (low)
 #define UART_BDL_SBR_Pos  0
 
 //UART control register 1 bitfields
@@ -144,25 +144,25 @@ struct UART_type {
 #define UART_S1_TDRE_Set    (1 << 7)
 
 //UART status register 2 bitfields
-#define UART_S2_RAF_Msk           0x01      //Receiver active flag
-#define UART_S2_RAF_Idle          (0 << 0)
-#define UART_S2_RAF_Active        (1 << 0)
-#define UART_S2_LBKDE_Disabled    (0 << 1)  //LIN break detection enable
-#define UART_S2_LBKDE_Enabled     (1 << 1)
-#define UART_S2_BRK13_Short       (0 << 2)  //Break transmit character length
-#define UART_S2_BRK13_Long        (1 << 2)
-#define UART_S2_RWUID_S1_NotSet   (0 << 3)  //Receive wakeup idle detect
-#define UART_S2_RWUID_S1_Set      (1 << 3)
-#define UART_S2_RXINV_Normal      (0 << 4)  //Receive data inversion
-#define UART_S2_RXINV_Inverted    (1 << 4)
-#define UART_S2_MSBF_LSB          (0 << 5)  //Most significant bit first
-#define UART_S2_MSBF_MSB          (1 << 5)
-#define UART_S2_RXEDGIF_Msk       0x40      //RxD pin active edge interrupt flag
-#define UART_S2_RXEDGIF_Clear     (0 << 6)
-#define UART_S2_RXEDGIF_Set       (1 << 6)
-#define UART_S2_LBKDIF_Msk        0x80      //LIN break detect interrupt flag
-#define UART_S2_LBKDIF_Clear      (0 << 7)
-#define UART_S2_LBKDIF_Set        (1 << 7)
+#define UART_S2_RAF_Msk         0x01      //Receiver active flag
+#define UART_S2_RAF_Idle        (0 << 0)
+#define UART_S2_RAF_Active      (1 << 0)
+#define UART_S2_LBKDE_Clear     (0 << 1)  //LIN break detection enable
+#define UART_S2_LBKDE_Set       (1 << 1)
+#define UART_S2_BRK13_Short     (0 << 2)  //Break transmit character length
+#define UART_S2_BRK13_Long      (1 << 2)
+#define UART_S2_RWUID_Disabled  (0 << 3)  //Receive wakeup idle detect
+#define UART_S2_RWUID_Enabled   (1 << 3)
+#define UART_S2_RXINV_Normal    (0 << 4)  //Receive data inversion
+#define UART_S2_RXINV_Inverted  (1 << 4)
+#define UART_S2_MSBF_LSB        (0 << 5)  //Most significant bit first
+#define UART_S2_MSBF_MSB        (1 << 5)
+#define UART_S2_RXEDGIF_Msk     0x40      //RxD pin active edge interrupt flag
+#define UART_S2_RXEDGIF_Clear   (0 << 6)
+#define UART_S2_RXEDGIF_Set     (1 << 6)
+#define UART_S2_LBKDIF_Msk      0x80      //LIN break detect interrupt flag
+#define UART_S2_LBKDIF_Clear    (0 << 7)
+#define UART_S2_LBKDIF_Set      (1 << 7)
 
 //UART control register 3 bitfields
 #define UART_C3_PEIE_Disabled   (0 << 0)  //Parity error interrupt enable
