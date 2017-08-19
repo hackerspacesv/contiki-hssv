@@ -1,6 +1,7 @@
 //+------------------------------------------------------------------------------------------------+
 //| Platform implementation for contiki's clock library.                                           |
 //|                                                                                                |
+//| This module depends on the LPTMR peripheral driver, which calls the clock_callback function.   |
 //| See the header in contiki/core/sys/clock.h for details on the exposed interface.               |
 //| Note: Deprecated functions aren't implemented.                                                 |
 //|                                                                                                |
@@ -11,26 +12,14 @@
 #include "etimer.h"
 
 #include "mkl26.h"
-#include "mkl26-sim.h"
-#include "mkl26-pit.h"
 
 //Variables used for tracking system time.
-static volatile clock_time_t tick_count = 0;      //Amount of PIT overflow ticks elapsed since boot
+static volatile clock_time_t tick_count = 0;      //Amount of clock ticks elapsed since boot
 static volatile unsigned long seconds_count = 0;  //Amount of seconds elapsed since boot
-static volatile uint16_t subseconds_count = 0;    //PIT overflow ticks elapsed since last second
-
-#define BUS_CLK 24000000
+static volatile uint16_t subseconds_count = 0;    //Amount of clock ticks elapsed since last second
 
 void clock_init(void) {
-  //Initialize the PIT0 timer.
-  SIM->SCGC6 |= SIM_SCGC6_PIT_Enabled;                          //Enable the module clock
-  PIT->LDVAL0 = (BUS_CLK / CLOCK_SECOND) - 1;                   //Set the period
-  PIT->TCTRL0 = PIT_TCTRL_TEN_Enabled | PIT_TCTRL_TIE_Enabled;  //Enable PIT0 and its interrupt
-  PIT->MCR = PIT_MCR_MDIS_Enabled | PIT_MCR_FRZ_DbgStop;        //Enable the PIT
-
-  //Configure the interrupt in the NVIC.
-  NVIC_SetPriority(PIT_IRQn, 2);  //Set a middle priority level
-  NVIC_EnableIRQ(PIT_IRQn);       //Enable the interrupt
+  //This function does nothing. This module depends on the LPTMR driver to be initialized.
 }
 
 CCIF clock_time_t clock_time(void) {
@@ -63,36 +52,26 @@ void clock_wait(clock_time_t t) {
 //(doesn't take into account code execution delays) but at least guarantees that the delayed time
 //isn't shorter than requested.
 void clock_delay_usec(uint16_t dt) {
-  const uint32_t cycles_per_us = BUS_CLK / 1000000;
-  uint32_t total_cycles;
-  uint32_t elapsed_cycles = 0;
-  uint32_t curr_cycle_count, last_cycle_count;
+#if F_CPU % 1000000 != 0
+  #warning "CPU clock period isn't an exact submultiple of 1us, clock_delay_usec() is not accurate"
+#endif
+  const uint32_t cycles_per_us = F_CPU / 1000000;
 
-  //Capture the starting value of the PIT counter.
-  curr_cycle_count = PIT->CVAL0;
+  //Prepare the systick timer for a single run for the requested time. Note that the time is 16 bits
+  //long, while the counter is 24 bits long. This means that cycles_per_us can be 256 at most.
+  SysTick->LOAD = ((uint32_t) dt) * cycles_per_us;                        //Set total cycles
+  SysTick->VAL = 0;                                                       //Clear initial count
+  SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;   //Enable timer, use F_CPU
 
-  //Calculate how many PIT cycles to track.
-  total_cycles = ((uint32_t) dt) * cycles_per_us;
+  //Wait for the timer to expire.
+  while ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == 0);
 
-  //Repeat until all expected cycles have elapsed.
-  while (elapsed_cycles < total_cycles) {
-    //Refresh the cycle counts.
-    last_cycle_count = curr_cycle_count;
-    curr_cycle_count = PIT->CVAL0;
-
-    //The PIT timer counts downwards. Calculate the elapsed time since last read.
-    elapsed_cycles += last_cycle_count - curr_cycle_count;
-
-    //Adjust in the case of PIT overflow.
-    if (curr_cycle_count > last_cycle_count)
-      elapsed_cycles += PIT->LDVAL0 + 1;
-  }
+  //Disable the timer.
+  SysTick->CTRL = 0;
 }
 
-void pit_handler() {
-  //Clear the interrupt flag.
-  PIT->TFLG0 |= PIT_TFLG_TIF_Set;
-
+//This callback function is automatically called by the LPTMR driver.
+void clock_callback() {
   //Increase the time count.
   tick_count++;
   subseconds_count++;

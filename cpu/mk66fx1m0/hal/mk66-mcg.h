@@ -54,10 +54,10 @@ struct MCG_type {
 #define MCG_C1_CLKS_External        (2 << 6)
 
 //Control 2 register bitfields
-#define MCG_C2_ICRS_Slow          (0 << 0)  //Internal reference clock select
-#define MCG_C2_ICRS_Fast          (1 << 0)
-#define MCG_C2_LP_Not_Disabled    (0 << 1)  //Low power select
-#define MCG_C2_LP_Disabled        (1 << 1)
+#define MCG_C2_IRCS_Slow          (0 << 0)  //Internal reference clock select
+#define MCG_C2_IRCS_Fast          (1 << 0)
+#define MCG_C2_LP_Clear           (0 << 1)  //Low power select
+#define MCG_C2_LP_Set             (1 << 1)
 #define MCG_C2_EREFS_External     (0 << 2)  //Extetrnal reference select
 #define MCG_C2_EREFS_Oscillator   (1 << 2)
 #define MCG_C2_HGO_Low_Power      (0 << 3)  //High gain oscillator select

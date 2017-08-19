@@ -4,4 +4,11 @@
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-//This header is an stub for now. It currently exists to allow clean compilation.
+#ifndef RTIMER_ARCH_H_
+#define RTIMER_ARCH_H_
+
+#include "contiki-conf.h"
+
+rtimer_clock_t rtimer_arch_now(void);
+
+#endif //RTIMER_ARCH_H_

@@ -17,12 +17,18 @@
 
 #include "contiki.h"
 
+#include "mkl26.h"
 #include "mkl26-port.h"
 #include "uart.h"
+#include "lptmr.h"
 
 void main() {
-  //Initialize the clock library, including timers.
+  //Initialize the LPTMR peripheral driver, which provides support for clock and rtimer libraries.
+  lptmr_init();
+
+  //Initialize clock and rtimer libraries.
   clock_init();
+  rtimer_init();
 
   //Configure the port multiplexing to use the UART0 alternate function on pins PTB16 and PTB17,
   //then initialize the UART0 peripheral (used for standard output).
@@ -49,6 +55,8 @@ void main() {
       n = process_run();
     } while (n > 0);
 
-    //TODO: Call sleep function here. Keep power consumption low.
+    //Enter low power state when there are no more processes to run.
+    //Note: Power down state depends on device configuration.
+    __WFI();
   }
 }

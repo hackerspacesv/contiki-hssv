@@ -10,10 +10,13 @@
 
 #include <stdint.h>
 
+#include "mkl26.h"
 #include "mkl26-sim.h"
 #include "mkl26-smc.h"
 #include "mkl26-osc.h"
 #include "mkl26-mcg.h"
+#include "mkl26-port.h"
+#include "mkl26-gpio.h"
 
 //Interrupt vector handler function type.
 typedef void (* handler_t)();
@@ -47,12 +50,33 @@ void startup() {
   const uint32_t *flash;
   uint32_t *sram;
 
+  //Common initialization.
+  //------------------------------------------------------------------------------------------------
+
   //Disable the watchdog.
   SIM->COPC = SIM_COPC_COPW_Normal | SIM_COPC_COPCLKS_Int_1kHz | SIM_COPC_COPT_Disabled;
+
+  //Enable the clocks of all ports.
+  SIM->SCGC5 = SIM_SCGC5_PORTA_Enabled | SIM_SCGC5_PORTB_Enabled | SIM_SCGC5_PORTC_Enabled |
+               SIM_SCGC5_PORTD_Enabled | SIM_SCGC5_PORTE_Enabled;
+
+  //Disable JTAG port pins so the debug module doesn't keep the system from entering into VLPS mode.
+  PORTA->PCR[3] = PORT_PCR_MUX_Analog;
+  PORTA->PCR[0] = PORT_PCR_MUX_Analog;
+
+  //Set pin 17/A3 as a low level output, so the 74LV1T125 doesn't consume too much power with a
+  //floating input.
+  PORTB->PCR[1] = PORT_PCR_MUX_Gpio;
+  GPIOB->PDDR |= 1 << 1;
+  GPIOB->PCOR = 1 << 1;
 
   //Enable all power modes.
   SMC->PMPROT = SMC_PMPROT_AVLP_Allowed | SMC_PMPROT_ALLS_Allowed | SMC_PMPROT_AVLLS_Allowed;
 
+  //Power profile based initialization.
+  //------------------------------------------------------------------------------------------------
+
+#if defined(MKL26_POWER_PROFILE_PERFORMANCE_48MHZ_PLL)
   //Configure the 16MHz external oscillator.
   OSC->CR = OSC_CR_ERCLKEN_Enabled | OSC_CR_SC2P_Enabled | OSC_CR_SC8P_Enabled;
   MCG->C2 = MCG_C2_RANGE0_Very_High | MCG_C2_HGO0_Low_Power | MCG_C2_EREFS_Oscillator;
@@ -81,8 +105,8 @@ void startup() {
   while ((MCG->S & MCG_S_LOCK0_Msk) != MCG_S_LOCK0_Locked);   //Wait for the PLL to lock
 
   //Configure all prescalers. Core runs at 48MHz, bus and flash run at 24MHz.
-  SIM->CLKDIV1 = ((1 << SIM_CLKDIV1_OUTDIV1_Pos) & SIM_CLKDIV1_OUTDIV1_Msk) |   //96 / 2 = 48MHz
-                 ((1 << SIM_CLKDIV1_OUTDIV4_Pos) & SIM_CLKDIV1_OUTDIV4_Msk);    //48 / 2 = 24MHz
+  SIM->CLKDIV1 = ((1 << SIM_CLKDIV1_OUTDIV1_Pos) & SIM_CLKDIV1_OUTDIV1_Msk) |   //96MHz / 2 = 48MHz
+                 ((1 << SIM_CLKDIV1_OUTDIV4_Pos) & SIM_CLKDIV1_OUTDIV4_Msk);    //48MHz / 2 = 24MHz
 
   //Transition into PEE (PLL engaged external) mode. Keep the FRDIV and IRFEFS settings unchanged.
   MCG->C1 = MCG_C1_CLKS_FLL_PLL | MCG_C1_FRDIV_Div_16_512 | MCG_C1_IREFS_External;
@@ -93,10 +117,80 @@ void startup() {
   //Select the PLL/2 source (48MHz) for all peripherals that have it as an option (TPM, USB0, UART0
   //and I2S0)
   SIM->SOPT2 = SIM_SOPT2_PLLFLLSEL_MCGPLLCLK_Div2;
+#elif defined(MKL26_POWER_PROFILE_LOWPOWER_4MHZ_INTREF)
+  //Switch to FBI mode (FLL bypassed internal), enable the internal reference for use as MCGIRCLK
+  //and enable the internal reference during stop mode.
+  MCG->C1 = MCG_C1_CLKS_Internal | MCG_C1_FRDIV_Div_1_32 | MCG_C1_IREFS_Internal |
+            MCG_C1_IRCLKEN_Enabled | MCG_C1_IREFSTEN_Enabled;
+  //Note: Leave the FLL reference to the default 32.768 internal clock. It's not really used.
 
-  //Enable the clocks of all ports.
-  SIM->SCGC5 = SIM_SCGC5_PORTA_Enabled | SIM_SCGC5_PORTB_Enabled | SIM_SCGC5_PORTC_Enabled |
-               SIM_SCGC5_PORTD_Enabled | SIM_SCGC5_PORTE_Enabled;
+  //Wait for the clock to switch to internal reference.
+  while ((MCG->S & MCG_S_CLKST_Msk) != MCG_S_CLKST_Internal);
+
+  //We're runing on the 32kHz internal clock now. Prepare the fast internal clock reference by
+  //setting the divider to 1 so output frequency is 4MHz.
+  MCG->SC = MCG_SC_FCRDIV_Div_1;
+
+  //Switch to BLPI mode (Bypassed Low Power Internal) and use the fast internal clock reference.
+  MCG->C2 = MCG_C2_LP_Set | MCG_C2_IRCS_Fast;
+
+  //Wait for the internal reference to switch to the fast internal clock.
+  while ((MCG->S & MCG_S_IRCST_Msk) != MCG_S_IRCST_Fast);
+
+  //Configure all prescalers. Core runs at 4MHz, bus and flash run at 2MHz.
+  SIM->CLKDIV1 = ((0 << SIM_CLKDIV1_OUTDIV1_Pos) & SIM_CLKDIV1_OUTDIV1_Msk) |   //4MHz / 1 = 4MHz
+                 ((1 << SIM_CLKDIV1_OUTDIV4_Pos) & SIM_CLKDIV1_OUTDIV4_Msk);    //4MHz / 2 = 2MHz
+
+  //Configure the USB voltage regulator to enter in standby mode during any of the stop modes.
+  SIM->SOPT1CFG |= SIM_SOPT1CFG_USSWE_W_Enable;   //Enable writing to USBSSTBY
+  SIM->SOPT1 = SIM_SOPT1_USBSSTBY_Standby;
+
+  //Set the stop mode to VLPS (Very Low Power Stop). Also set the SLEEPDEEP bit in the System
+  //Control Register so the stop mode becomes effective.
+  SMC->PMCTRL = SMC_PMCTRL_STOPM_VLPS;
+  SCB->SCR = SCB_SCR_SLEEPDEEP_Msk;
+
+#elif defined(MKL26_POWER_PROFILE_LOWPOWER_4MHZ_EXTREF)
+  //Switch to FBI mode (FLL bypassed internal), enable the internal reference for use as MCGIRCLK
+  //and disable the internal reference during stop mode.
+  MCG->C1 = MCG_C1_CLKS_Internal | MCG_C1_FRDIV_Div_1_32 | MCG_C1_IREFS_Internal |
+            MCG_C1_IRCLKEN_Enabled | MCG_C1_IREFSTEN_Disabled;
+  //Note: Leave the FLL reference to the default 32.768 internal clock. It's not really used.
+
+  //Wait for the clock to switch to internal reference.
+  while ((MCG->S & MCG_S_CLKST_Msk) != MCG_S_CLKST_Internal);
+
+  //We're runing on the 32kHz internal clock now. Prepare the fast internal clock reference by
+  //setting the divider to 1 so output frequency is 4MHz.
+  MCG->SC = MCG_SC_FCRDIV_Div_1;
+
+  //Switch to BLPI mode (Bypassed Low Power Internal) and use the fast internal clock reference.
+  MCG->C2 = MCG_C2_LP_Set | MCG_C2_IRCS_Fast;
+
+  //Wait for the internal reference to switch to the fast internal clock.
+  while ((MCG->S & MCG_S_IRCST_Msk) != MCG_S_IRCST_Fast);
+
+  //Configure all prescalers. Core runs at 4MHz, bus and flash run at 2MHz.
+  SIM->CLKDIV1 = ((0 << SIM_CLKDIV1_OUTDIV1_Pos) & SIM_CLKDIV1_OUTDIV1_Msk) |   //4MHz / 1 = 4MHz
+                 ((1 << SIM_CLKDIV1_OUTDIV4_Pos) & SIM_CLKDIV1_OUTDIV4_Msk);    //4MHz / 2 = 2MHz
+
+  //Configure the USB voltage regulator to enter in standby mode during any of the stop modes. Set
+  //the 32kHz clock source for RTC and LPTMR to the CLKIN pin. 
+  SIM->SOPT1CFG |= SIM_SOPT1CFG_USSWE_W_Enable;   //Enable writing to USBSSTBY
+  SIM->SOPT1 = SIM_SOPT1_USBSSTBY_Standby | SIM_SOPT1_OSC32KSEL_RTC_CLKIN;
+  PORTC->PCR[1] = PORT_PCR_MUX_Gpio;              //Set the PORTC mux to GPIO to accept clock signal
+
+  //Set the stop mode to VLPS (Very Low Power Stop). Also set the SLEEPDEEP bit in the System
+  //Control Register so the stop mode becomes effective.
+  SMC->PMCTRL = SMC_PMCTRL_STOPM_VLPS;
+  SCB->SCR = SCB_SCR_SLEEPDEEP_Msk;
+
+#else
+  #error "Unsupported power profile"
+#endif
+
+  //Memory initialization.
+  //------------------------------------------------------------------------------------------------
 
   //Copy the initial data for the data section from FLASH to RAM.
   flash = &__relocate_flash_start__;
