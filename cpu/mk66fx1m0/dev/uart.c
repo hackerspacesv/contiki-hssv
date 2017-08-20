@@ -24,7 +24,7 @@ void uart_init(volatile struct UART_type *UART) {
     SIM->SCGC1 |= SIM_SCGC1_UART4_Enabled;
 
   //Set the baud rate to 115200 bps (MSB) and use a single stop bit.
-  UART->BDH = (((97>>8) & UART_BDH_SBR_Msk) << UART_BDH_SBR_Pos) | UART_BDH_SBNS_1;
+  UART->BDH = (((97 >> 8) & UART_BDH_SBR_Msk) << UART_BDH_SBR_Pos) | UART_BDH_SBNS_1;
 
   //Set the baud rate to 115200 bps (LSB).
   UART->BDL = (97 & UART_BDL_SBR_Msk) << UART_BDL_SBR_Pos;

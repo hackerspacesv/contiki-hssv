@@ -73,15 +73,15 @@ void startup() {
   MCG->C5 = MCG_C5_PRDIV0_Div_8;
 
   //Transition to PBE (PLL bypassed external) mode. This causes to PLL to start up. Set the
-  //multiplier to 24. Final frequency will be 2MHz * 24 = 48MHz.
-  MCG->C6 = MCG_C6_PLLS_PLL | MCG_C6_VDIV0_Div_24;
+  //multiplier to 48. Final frequency will be 2MHz * 48 = 96MHz.
+  MCG->C6 = MCG_C6_PLLS_PLL | MCG_C6_VDIV0_Div_48;
 
   //Wait for the PLL to become ready.
   while ((MCG->S & MCG_S_PLLST_Msk) != MCG_S_PLLST_PLL);      //Wait for the PLL to be selected
   while ((MCG->S & MCG_S_LOCK0_Msk) != MCG_S_LOCK0_Locked);   //Wait for the PLL to lock
 
   //Configure all prescalers. Core runs at 48MHz, bus and flash run at 24MHz.
-  SIM->CLKDIV1 = ((0 << SIM_CLKDIV1_OUTDIV1_Pos) & SIM_CLKDIV1_OUTDIV1_Msk) |   //48 / 1 = 48MHz
+  SIM->CLKDIV1 = ((1 << SIM_CLKDIV1_OUTDIV1_Pos) & SIM_CLKDIV1_OUTDIV1_Msk) |   //96 / 2 = 48MHz
                  ((1 << SIM_CLKDIV1_OUTDIV4_Pos) & SIM_CLKDIV1_OUTDIV4_Msk);    //48 / 2 = 24MHz
 
   //Transition into PEE (PLL engaged external) mode. Keep the FRDIV and IRFEFS settings unchanged.
@@ -89,6 +89,10 @@ void startup() {
 
   //Wait for the PLL to be selected as a system clock source.
   while ((MCG->S & MCG_S_CLKST_Msk) != MCG_S_CLKST_PLL);
+
+  //Select the PLL/2 source (48MHz) for all peripherals that have it as an option (TPM, USB0, UART0
+  //and I2S0)
+  SIM->SOPT2 = SIM_SOPT2_PLLFLLSEL_MCGPLLCLK_Div2;
 
   //Enable the clocks of all ports.
   SIM->SCGC5 = SIM_SCGC5_PORTA_Enabled | SIM_SCGC5_PORTB_Enabled | SIM_SCGC5_PORTC_Enabled |

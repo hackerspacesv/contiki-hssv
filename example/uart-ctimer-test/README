@@ -6,7 +6,8 @@ print the current system time (seconds count) to the standard output.
 
 Building.
 ---------
-To compile the demo, simply provide a target name (e.g. teensy-32 or teensy-36) to the make command:
+To compile the demo, simply provide a target name (e.g. teensy-lc, teensy-32 or teensy-36) to the
+make command:
 $ make TARGET=teensy-32
 
 You can clean all generated files (except .elf and .hex) with this command:

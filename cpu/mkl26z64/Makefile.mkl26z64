@@ -25,8 +25,12 @@ LDFLAGS += -gc-sections -T$(CONTIKI_CPU)/mkl26z64.ld -lc
 LDFLAGS += $(CPUFLAGS)
 
 #Configure the CPU path and source files.
-CONTIKI_CPU_DIRS += . hal ../../contiki/cpu/arm/common/CMSIS
-CONTIKI_SOURCEFILES += mkl26-startup.c clock.c
+CONTIKI_CPU_DIRS += . hal dev ../../contiki/cpu/arm/common/CMSIS
+CONTIKI_SOURCEFILES += mkl26-startup.c clock.c uart.c
+
+#Don't treat %.co and $(OBJECTDIR)/syscalls.o as intermediates (avoids deletion and re-compiling)
+.PRECIOUS: %.co
+.PRECIOUS: $(OBJECTDIR)/syscalls.o
 
 #Override the link rule so gcc can be called with -specs instead of ld and also generate a .hex file
 #in the same process.
