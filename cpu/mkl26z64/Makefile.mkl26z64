@@ -53,6 +53,7 @@ CPUFLAGS += -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft
 CPUFLAGS += -specs=nano.specs -specs=nosys.specs
 
 #Set the C code flags.
+CFLAGS += -DMKL26Z64
 CFLAGS += -g -ffunction-sections -fdata-sections -O2
 #CFLAGS += -Wall -g -ffunction-sections -fdata-sections -O2
 CFLAGS += $(CPUFLAGS)
@@ -62,7 +63,7 @@ LDFLAGS += -gc-sections -T$(CONTIKI_CPU)/mkl26z64.ld -lc
 LDFLAGS += $(CPUFLAGS)
 
 #Configure the CPU path and source files.
-CONTIKI_CPU_DIRS += . hal dev ../../contiki/cpu/arm/common/CMSIS
+CONTIKI_CPU_DIRS += . hal dev ../kinetis-common/dev ../../contiki/cpu/arm/common/CMSIS
 CONTIKI_SOURCEFILES += mkl26-startup.c clock.c rtimer-arch.c uart.c lptmr.c
 
 #Don't treat %.co and $(OBJECTDIR)/syscalls.o as intermediates (avoids deletion and re-compiling)

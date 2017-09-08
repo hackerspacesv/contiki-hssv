@@ -16,6 +16,7 @@ CPUFLAGS += -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 CPUFLAGS += -specs=nano.specs -specs=nosys.specs
 
 #Set the C code flags.
+CFLAGS += -DMK66FX1M0
 CFLAGS += -g -ffunction-sections -fdata-sections -O2
 #CFLAGS += -Wall -g -ffunction-sections -fdata-sections -O2
 CFLAGS += $(CPUFLAGS)
@@ -25,7 +26,7 @@ LDFLAGS += -gc-sections -T$(CONTIKI_CPU)/mk66fx1m0.ld -lc
 LDFLAGS += $(CPUFLAGS)
 
 #Configure the CPU path and source files.
-CONTIKI_CPU_DIRS += . hal dev ../../contiki/cpu/arm/common/CMSIS
+CONTIKI_CPU_DIRS += . hal dev ../kinetis-common/dev ../../contiki/cpu/arm/common/CMSIS
 CONTIKI_SOURCEFILES += mk66-startup.c clock.c uart.c
 
 #Don't treat %.co and $(OBJECTDIR)/syscalls.o as intermediates (avoids deletion and re-compiling)
