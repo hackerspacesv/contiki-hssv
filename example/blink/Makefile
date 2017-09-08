@@ -9,6 +9,6 @@ CONTIKI_PROJECT = blink
 all: $(CONTIKI_PROJECT)
 
 #Configure contiki for out of tree compilation and include its main makefile.
-CONTIKI = ../../../contiki
-TARGETDIRS += ../../../platform
+CONTIKI = ../../contiki
+TARGETDIRS += ../../platform
 include $(CONTIKI)/Makefile.include
