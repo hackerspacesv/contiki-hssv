@@ -59,7 +59,7 @@ CFLAGS += -g -ffunction-sections -fdata-sections -O2
 CFLAGS += $(CPUFLAGS)
 
 #Set the linker flags.
-LDFLAGS += -gc-sections -T$(CONTIKI_CPU)/mkl26z64.ld -lc
+LDFLAGS += -Wl,--gc-sections -T$(CONTIKI_CPU)/mkl26z64.ld -lc
 LDFLAGS += $(CPUFLAGS)
 
 #Configure the CPU path and source files.
