@@ -6,7 +6,7 @@
 
 #ifndef CONTIKI_CONF_H_
 #define CONTIKI_CONF_H_
- 
+
 #include <stdint.h>
 
 //Clock library configuration

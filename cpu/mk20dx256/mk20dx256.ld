@@ -55,8 +55,7 @@ SECTIONS {
 
   /* Stack unwinding information section is allocated in flash */
   .ARM.exidx : {
-    . = ALIGN(4);
-    *(.ARM.exidx)   
+    *(.ARM.exidx*)
   } > FLASH
 
   /* Initialized read/write sections are allocated in RAM but loaded in flash */

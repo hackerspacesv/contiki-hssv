@@ -348,7 +348,7 @@ handler_t vectors[116] = {
   can_0_receive_warning_handler,    //95 - CAN 0 receive warning
   can_0_wake_up_handler,            //96 - CAN 0 wake up
   sdhc_handler,                     //97 - SDHC
-  enet_timer_handler,               //98 - Ethernet MAC IEEE 1588 timer interrupt 
+  enet_timer_handler,               //98 - Ethernet MAC IEEE 1588 timer interrupt
   enet_transmit_handler,            //99 - Ethernet MAC transmit interrupt
   enet_receive_handler,             //100 - Ethernet MAC receive interrupt
   enet_error_misc_handler,          //101 - Ethernet MAC error and miscellaneous interrupt

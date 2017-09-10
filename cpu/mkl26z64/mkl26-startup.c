@@ -175,7 +175,7 @@ void startup() {
                  ((1 << SIM_CLKDIV1_OUTDIV4_Pos) & SIM_CLKDIV1_OUTDIV4_Msk);    //4MHz / 2 = 2MHz
 
   //Configure the USB voltage regulator to enter in standby mode during any of the stop modes. Set
-  //the 32kHz clock source for RTC and LPTMR to the CLKIN pin. 
+  //the 32kHz clock source for RTC and LPTMR to the CLKIN pin.
   SIM->SOPT1CFG |= SIM_SOPT1CFG_USSWE_W_Enable;   //Enable writing to USBSSTBY
   SIM->SOPT1 = SIM_SOPT1_USBSSTBY_Standby | SIM_SOPT1_OSC32KSEL_RTC_CLKIN;
   PORTC->PCR[1] = PORT_PCR_MUX_Gpio;              //Set the PORTC mux to GPIO to accept clock signal
