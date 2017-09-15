@@ -10,23 +10,23 @@
 #include <stdint.h>
 
 struct UART0_type {
-  uint8_t BDH;            //UART baud rate register high
-  uint8_t BDL;            //UART baud rate register low
-  uint8_t C1;             //UART control register 1
-  uint8_t C2;             //UART control register 2
-  uint8_t S1;             //UART status register 1
-  uint8_t S2;             //UART status register 2
-  uint8_t C3;             //UART control register 3
-  uint8_t D;              //UART data register
-  uint8_t MA1;            //UART match address register 1
-  uint8_t MA2;            //UART match address register 2
-  uint8_t C4;             //UART control register 4
-  uint8_t C5;             //UART control register 5
+  uint8_t BDH;            //Baud rate register high
+  uint8_t BDL;            //Baud rate register low
+  uint8_t C1;             //Control register 1
+  uint8_t C2;             //Control register 2
+  uint8_t S1;             //Status register 1
+  uint8_t S2;             //Status register 2
+  uint8_t C3;             //Control register 3
+  uint8_t D;              //Data register
+  uint8_t MA1;            //Match address register 1
+  uint8_t MA2;            //Match address register 2
+  uint8_t C4;             //Control register 4
+  uint8_t C5;             //Control register 5
 };
 
 #define UART0 ((volatile struct UART0_type *) 0x4006A000)
 
-//UART baud rate register high bitfields
+//Baud rate register high bitfields
 #define UART0_BDH_SBR_Msk            0x1F      //Baud rate modulo divisor (MSB)
 #define UART0_BDH_SBR_Pos            0
 #define UART0_BDH_SBNS_1             (0 << 5)  //Stop bit number select
@@ -36,11 +36,11 @@ struct UART0_type {
 #define UART0_BDH_LBKDIE_Disabled    (0 << 7)  //LIN break detect interrupt enable
 #define UART0_BDH_LBKDIE_Enabled     (1 << 7)
 
-//UART baud rate register low bitfields
+//Baud rate register low bitfields
 #define UART0_BDL_SBR_Msk  0xFF  //Baud rate modulo divisor (LSB)
 #define UART0_BDL_SBR_Pos  0
 
-//UART control register 1 bitfields
+//Control register 1 bitfields
 #define UART0_C1_PT_Even         (0 << 0)  //Parity type
 #define UART0_C1_PT_Odd          (1 << 0)
 #define UART0_C1_PE_Disabled     (0 << 1)  //Parity enable
@@ -58,7 +58,7 @@ struct UART0_type {
 #define UART0_C1_LOOPS_Normal    (0 << 7)  //Loop mode select
 #define UART0_C1_LOOPS_Loop      (1 << 7)
 
-//UART control register 2 bitfields
+//Control register 2 bitfields
 #define UART0_C2_SBK_Clear       (0 << 0)  //Send break
 #define UART0_C2_SBK_Set         (1 << 0)
 #define UART0_C2_RWU_Clear       (0 << 1)  //Receiver wakeup control
@@ -76,7 +76,7 @@ struct UART0_type {
 #define UART0_C2_TIE_Disabled    (0 << 7)  //Transmit interrupt enable for TDRE
 #define UART0_C2_TIE_Enabled     (1 << 7)
 
-//UART status register 1 bitfields
+//Status register 1 bitfields
 #define UART0_S1_PF_Msk      0x01      //Parity error flag
 #define UART0_S1_PF_Clear    (0 << 0)
 #define UART0_S1_PF_Set      (1 << 0)
@@ -102,7 +102,7 @@ struct UART0_type {
 #define UART0_S1_TDRE_Clear  (0 << 7)
 #define UART0_S1_TDRE_Set    (1 << 7)
 
-//UART status register 2 bitfields
+//Status register 2 bitfields
 #define UART0_S2_RAF_Msk         0x01      //Receiver active flag
 #define UART0_S2_RAF_Idle        (0 << 0)
 #define UART0_S2_RAF_Active      (1 << 0)
@@ -123,7 +123,7 @@ struct UART0_type {
 #define UART0_S2_LBKDIF_Clear    (0 << 7)
 #define UART0_S2_LBKDIF_Set      (1 << 7)
 
-//UART control register 3 bitfields
+//Control register 3 bitfields
 #define UART0_C3_PEIE_Disabled   (0 << 0)  //Parity error interrupt enable
 #define UART0_C3_PEIE_Enabled    (1 << 0)
 #define UART0_C3_FEIE_Disabled   (0 << 1)  //Framing error interrupt enable
@@ -141,7 +141,7 @@ struct UART0_type {
 #define UART0_C3_R8T9_Msk        0x80      //Receive bit 8 / transmit bit 9
 #define UART0_C3_R8T9_Pos        7
 
-//UART control register 4 bitfields
+//Control register 4 bitfields
 #define UART0_C4_OSR_Msk         0x1F      //Over sampling ratio
 #define UART0_C4_OSR_Pos         0
 #define UART0_C4_M10_8_9Bit      (0 << 5)  //10-bit mode select
@@ -151,7 +151,7 @@ struct UART0_type {
 #define UART0_C4_MAEN1_Disabled  (0 << 7)  //Match address mode enable 1
 #define UART0_C4_MAEN1_Enabled   (1 << 7)
 
-//UART control register 5 bitfields
+//Control register 5 bitfields
 #define UART0_C5_RESYNCDIS_Enabled   (0 << 0)  //Resynchronization disable
 #define UART0_C5_RESYNCDIS_Disabled  (1 << 0)
 #define UART0_C5_BOTHEDGE_Rising     (0 << 1)  //Both edge sampling

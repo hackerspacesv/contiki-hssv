@@ -10,45 +10,45 @@
 #include <stdint.h>
 
 struct UART_type {
-  uint8_t BDH;            //UART baud rate register high
-  uint8_t BDL;            //UART baud rate register low
-  uint8_t C1;             //UART control register 1
-  uint8_t C2;             //UART control register 2
-  uint8_t S1;             //UART status register 1
-  uint8_t S2;             //UART status register 2
-  uint8_t C3;             //UART control register 3
-  uint8_t D;              //UART data register
-  uint8_t MA1;            //UART match address register 1
-  uint8_t MA2;            //UART match address register 2
-  uint8_t C4;             //UART control register 4
-  uint8_t C5;             //UART control register 5
-  uint8_t ED;             //UART extended data register
-  uint8_t MODEM;          //UART modem register
-  uint8_t IR;             //UART infrared register
+  uint8_t BDH;            //Baud rate register high
+  uint8_t BDL;            //Baud rate register low
+  uint8_t C1;             //Control register 1
+  uint8_t C2;             //Control register 2
+  uint8_t S1;             //Status register 1
+  uint8_t S2;             //Status register 2
+  uint8_t C3;             //Control register 3
+  uint8_t D;              //Data register
+  uint8_t MA1;            //Match address register 1
+  uint8_t MA2;            //Match address register 2
+  uint8_t C4;             //Control register 4
+  uint8_t C5;             //Control register 5
+  uint8_t ED;             //Extended data register
+  uint8_t MODEM;          //Modem register
+  uint8_t IR;             //Infrared register
   uint8_t reserved0;
-  uint8_t PFIFO;          //UART FIFO parameters
-  uint8_t CFIFO;          //UART FIFO control register
-  uint8_t SFIFO;          //UART FIFO status register
-  uint8_t TWFIFO;         //UART FIFO transmit watermark
-  uint8_t TCFIFO;         //UART FIFO transmit count
-  uint8_t RWFIFO;         //UART FIFO receive watermark
-  uint8_t RCFIFO;         //UART FIFO receive count
+  uint8_t PFIFO;          //FIFO parameters
+  uint8_t CFIFO;          //FIFO control register
+  uint8_t SFIFO;          //FIFO status register
+  uint8_t TWFIFO;         //FIFO transmit watermark
+  uint8_t TCFIFO;         //FIFO transmit count
+  uint8_t RWFIFO;         //FIFO receive watermark
+  uint8_t RCFIFO;         //FIFO receive count
   uint8_t reserved1;
-  uint8_t C7816;          //UART 7816 control register
-  uint8_t IE7816;         //UART 7816 interrupt enable register
-  uint8_t IS7816;         //UART 7816 interrupt status register
-  uint8_t WP7816;         //UART 7816 wait parameter register
-  uint8_t WN7816;         //UART 7816 wait N register
-  uint8_t WF7816;         //UART 7816 wait FD register
-  uint8_t ET7816;         //UART 7816 error threshold register
-  uint8_t TL7816;         //UART 7816 transmit length register
+  uint8_t C7816;          //7816 control register
+  uint8_t IE7816;         //7816 interrupt enable register
+  uint8_t IS7816;         //7816 interrupt status register
+  uint8_t WP7816;         //7816 wait parameter register
+  uint8_t WN7816;         //7816 wait N register
+  uint8_t WF7816;         //7816 wait FD register
+  uint8_t ET7816;         //7816 error threshold register
+  uint8_t TL7816;         //7816 transmit length register
   uint8_t reserved2[26];
-  uint8_t AP7816A_T0;     //UART 7816 ATR duration timer register A
-  uint8_t AP7816B_T0;     //UART 7816 ATR duration timer register B
-  uint8_t WP7816A_T0_T1;  //UART 7816 wait parameter register A
-  uint8_t WP7816B_T0_T1;  //UART 7816 wait parameter register B
-  uint8_t WGP7816_T1;     //UART 7816 wait and guard parameter register
-  uint8_t WP7816C_T1;     //UART 7816 wait parameter register C
+  uint8_t AP7816A_T0;     //7816 ATR duration timer register A
+  uint8_t AP7816B_T0;     //7816 ATR duration timer register B
+  uint8_t WP7816A_T0_T1;  //7816 wait parameter register A
+  uint8_t WP7816B_T0_T1;  //7816 wait parameter register B
+  uint8_t WGP7816_T1;     //7816 wait and guard parameter register
+  uint8_t WP7816C_T1;     //7816 wait parameter register C
 };
 
 #define UART0 ((volatile struct UART_type *) 0x4006A000)
@@ -57,7 +57,7 @@ struct UART_type {
 #define UART3 ((volatile struct UART_type *) 0x4006D000)
 #define UART4 ((volatile struct UART_type *) 0x400EA000)
 
-//UART baud rate register high bitfields
+//Baud rate register high bitfields
 #define UART_BDH_SBR_Msk            0x1F      //UART baud rate bits (high)
 #define UART_BDH_SBR_Pos            0
 #define UART_BDH_SBNS_1             (0 << 5)  //Stop bit number select
@@ -67,11 +67,11 @@ struct UART_type {
 #define UART_BDH_LBKDIE_Disabled    (0 << 7)  //LIN break detect interrupt enable
 #define UART_BDH_LBKDIE_Enabled     (1 << 7)
 
-//UART baud rate register low bitfields
+//Baud rate register low bitfields
 #define UART_BDL_SBR_Msk  0xFF  //UART baud rate bits (low)
 #define UART_BDL_SBR_Pos  0
 
-//UART control register 1 bitfields
+//Control register 1 bitfields
 #define UART_C1_PT_Even           (0 << 0)  //Parity type
 #define UART_C1_PT_Odd            (1 << 0)
 #define UART_C1_PE_Disabled       (0 << 1)  //Parity enable
@@ -89,7 +89,7 @@ struct UART_type {
 #define UART_C1_LOOPS_Normal      (0 << 7)  //Loop mode select
 #define UART_C1_LOOPS_Loop        (1 << 7)
 
-//UART control register 2 bitfields
+//Control register 2 bitfields
 #define UART_C2_SBK_Clear       (0 << 0)  //Send break
 #define UART_C2_SBK_Set         (1 << 0)
 #define UART_C2_RWU_Clear       (0 << 1)  //Receiver wakeup control
@@ -107,7 +107,7 @@ struct UART_type {
 #define UART_C2_TIE_Disabled    (0 << 7)  //Transmitter interrupt or DMA transfer enable
 #define UART_C2_TIE_Enabled     (1 << 7)
 
-//UART status register 1 bitfields
+//Status register 1 bitfields
 #define UART_S1_PF_Msk      0x01      //Parity error flag
 #define UART_S1_PF_Clear    (0 << 0)
 #define UART_S1_PF_Set      (1 << 0)
@@ -133,7 +133,7 @@ struct UART_type {
 #define UART_S1_TDRE_Clear  (0 << 7)
 #define UART_S1_TDRE_Set    (1 << 7)
 
-//UART status register 2 bitfields
+//Status register 2 bitfields
 #define UART_S2_RAF_Msk         0x01      //Receiver active flag
 #define UART_S2_RAF_Idle        (0 << 0)
 #define UART_S2_RAF_Active      (1 << 0)
@@ -154,7 +154,7 @@ struct UART_type {
 #define UART_S2_LBKDIF_Clear    (0 << 7)
 #define UART_S2_LBKDIF_Set      (1 << 7)
 
-//UART control register 3 bitfields
+//Control register 3 bitfields
 #define UART_C3_PEIE_Disabled   (0 << 0)  //Parity error interrupt enable
 #define UART_C3_PEIE_Enabled    (1 << 0)
 #define UART_C3_FEIE_Disabled   (0 << 1)  //Framing error interrupt enable
@@ -172,7 +172,7 @@ struct UART_type {
 #define UART_C3_R8_Msk          0x80      //Received bit 8
 #define UART_C3_R8_Pos          7
 
-//UART control register 4 bitfields
+//Control register 4 bitfields
 #define UART_C4_BRFA_Msk        0x1F      //Baud rate fine adjust
 #define UART_C4_BRFA_Pos        0
 #define UART_C4_M10_P9          (0 << 5)  //10-bit mode select
@@ -182,13 +182,13 @@ struct UART_type {
 #define UART_C4_MAEN1_Disabled  (0 << 7)  //Match address mode enable 1
 #define UART_C4_MAEN1_Enabled   (1 << 7)
 
-//UART control register 5 bitfields
+//Control register 5 bitfields
 #define UART_C5_RDMAS_IRQ   (0 << 5)  //Receiver full DMA select
 #define UART_C5_RDMAS_DMA   (1 << 5)
 #define UART_C5_TDMAS_IRQ   (0 << 7)  //Transmitter DMA select
 #define UART_C5_TDMAS_DMA   (1 << 7)
 
-//UART extended data register bitfields
+//Extended data register bitfields
 #define UART_ED_PARITYE_Msk     0x40      //Indicates parity error in the current received dataword
 #define UART_ED_PARITYE_OK      (0 << 6)
 #define UART_ED_PARITYE_ERROR   (1 << 6)
@@ -196,7 +196,7 @@ struct UART_type {
 #define UART_ED_NOISY_OK        (0 << 7)
 #define UART_ED_NOISY_Noisy     (1 << 7)
 
-//UART modem register bitfields
+//Modem register bitfields
 #define UART_MODEM_TXCTSE_Disabled  (0 << 0)  //Transmitter clear to send enable
 #define UART_MODEM_TXCTSE_Enabled   (1 << 0)
 #define UART_MODEM_TXRTSE_Disabled  (0 << 1)  //Transmitter request to send enable
@@ -206,7 +206,7 @@ struct UART_type {
 #define UART_MODEM_RXRTSE_Disabled  (0 << 3)  //Receiver request to send enable
 #define UART_MODEM_RXRTSE_Enabled   (1 << 3)
 
-//UART infrared register bitfields
+//Infrared register bitfields
 #define UART_IR_TNP_3_16        (0 << 0)  //Transmitter narrow pulse
 #define UART_IR_TNP_1_16        (1 << 0)
 #define UART_IR_TNP_1_32        (2 << 0)
@@ -214,7 +214,7 @@ struct UART_type {
 #define UART_IR_IREN_Disabled   (0 << 2)  //Infrared enable
 #define UART_IR_IREN_Enabled    (1 << 2)
 
-//UART FIFO parameters bitfields
+//FIFO parameters bitfields
 #define UART_PFIFO_RXFIFOSIZE_1     (0 << 0)  //Receive FIFO buffer depth
 #define UART_PFIFO_RXFIFOSIZE_4     (1 << 0)
 #define UART_PFIFO_RXFIFOSIZE_8     (2 << 0)
@@ -234,7 +234,7 @@ struct UART_type {
 #define UART_PFIFO_TXFE_Disabled    (0 << 7)  //Transmit FIFO enable
 #define UART_PFIFO_TXFE_Enabled     (1 << 7)
 
-//UART FIFO control register bitfields
+//FIFO control register bitfields
 #define UART_CFIFO_RXUFE_Disabled   (0 << 0)  //Receive FIFO underflow interrupt enable
 #define UART_CFIFO_RXUFE_Enabled    (1 << 0)
 #define UART_CFIFO_TXOFE_Disabled   (0 << 1)  //Transmit FIFO overflow interrupt enable
@@ -246,7 +246,7 @@ struct UART_type {
 #define UART_CFIFO_TXFLUSH_Nop      (0 << 7)  //Transmit FIFO/buffer flush
 #define UART_CFIFO_TXFLUSH_Flush    (1 << 7)
 
-//UART FIFO status register bitfields
+//FIFO status register bitfields
 #define UART_SFIFO_RXUF_Msk         0x01      //Receiver buffer underflow flag
 #define UART_SFIFO_RXUF_Clear       (0 << 0)
 #define UART_SFIFO_RXUF_Set         (1 << 0)
@@ -263,7 +263,7 @@ struct UART_type {
 #define UART_SFIFO_TXEMPT_HasData   (0 << 7)
 #define UART_SFIFO_TXEMPT_Empty     (1 << 7)
 
-//UART 7816 control register bitfields
+//7816 control register bitfields
 #define UART_C7816_ISO_7816E_Disabled   (0 << 0)  //ISO-7816 functionality enabled
 #define UART_C7816_ISO_7816E_Enabled    (1 << 0)
 #define UART_C7816_TTYPE_T0             (0 << 1)  //Transfer type
@@ -275,7 +275,7 @@ struct UART_type {
 #define UART_C7816_ONACK_Disabled       (0 << 4)  //Generate NACK on overflow
 #define UART_C7816_ONACK_Enabled        (1 << 4)
 
-//UART 7816 interrupt enable register bitfields
+//7816 interrupt enable register bitfields
 #define UART_IE7816_RXTE_Disabled     (0 << 0)  //Receive threshold exceeded interrupt enable
 #define UART_IE7816_RXTE_Enabled      (1 << 0)
 #define UART_IE7816_TXTE_Disabled     (0 << 1)  //Transmit threshold exceeded interrupt enable
@@ -293,7 +293,7 @@ struct UART_type {
 #define UART_IE7816_WTE_Disabled      (0 << 7)  //Wait timer interrupt enable
 #define UART_IE7816_WTE_Enabled       (1 << 7)
 
-//UART 7816 interrupt status register bitfields
+//7816 interrupt status register bitfields
 #define UART_IS7816_RXT_Msk       0x01      //Receive threshold exceeded interrupt
 #define UART_IS7816_RXT_Clear     (0 << 0)
 #define UART_IS7816_RXT_Set       (1 << 0)
@@ -319,19 +319,19 @@ struct UART_type {
 #define UART_IS7816_WT_Clear      (0 << 7)
 #define UART_IS7816_WT_Set        (1 << 7)
 
-//UART 7816 error threshold register bitfields
+//7816 error threshold register bitfields
 #define UART_ET7816_RXTHRESHOLD_Msk   0x0F  //Receive NACK threshold
 #define UART_ET7816_RXTHRESHOLD_Pos   0
 #define UART_ET7816_TXTHRESHOLD_Msk   0xF0  //Transmit NACK threshold
 #define UART_ET7816_TXTHRESHOLD_Pos   4
 
-//UART 7816 wait and guard parameter register
+//7816 wait and guard parameter register
 #define UART_WGP7816_T1_BGI_Msk   0x0F  //Block guard time integer
 #define UART_WGP7816_T1_BGI_Pos   0
 #define UART_WGP7816_T1_CWI1_Msk  0xF0  //Character wait time integer 1
 #define UART_WGP7816_T1_CWI1_Pos  4
 
-//UART 7816 wait parameter register C
+//7816 wait parameter register C
 #define UART_WP7816C_T1_CWI2_Msk  0x1F  //Character wait time integer 2
 #define UART_WP7816C_T1_CWI2_Pos  0
 
