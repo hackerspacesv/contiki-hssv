@@ -9,5 +9,5 @@ CONTIKI_TARGET_DIRS += .
 CONTIKI_SOURCEFILES += contiki-main.c
 
 #Include the CPU makefile.
-CONTIKI_CPU = $(CONTIKI)/../cpu/mk20dx256
+CONTIKI_CPU = $(shell realpath --relative-to=. $(CONTIKI)/../cpu/mk20dx256)
 include $(CONTIKI_CPU)/Makefile.mk20dx256
