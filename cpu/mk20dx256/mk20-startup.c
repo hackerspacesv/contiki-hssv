@@ -38,7 +38,6 @@ extern uint32_t __bss_start__;
 extern uint32_t __bss_end__;
 
 //External functions invoked by startup code.
-extern void __libc_init_array();
 extern void main();
 
 //--------------------------------------------------------------------------------------------------
@@ -108,9 +107,6 @@ void startup() {
   sram = &__bss_start__;
   while (sram < &__bss_end__)
     *sram++ = 0;
-
-  //Initialize libc.
-  __libc_init_array();
 
   //System is up. Call the main function.
   main();
