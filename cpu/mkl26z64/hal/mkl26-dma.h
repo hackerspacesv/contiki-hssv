@@ -9,17 +9,18 @@
 
 #include <stdint.h>
 
-struct DMA_type {
+struct DMA_CHANNEL {
   uint32_t SAR;       //Source address register
   uint32_t DAR;       //Destination address register
   uint32_t DSR_BCR;   //Status register / Byte count register
   uint32_t DCR;       //Control register
 };
 
-#define DMA0 ((volatile struct DMA_type *) 0x40008100)
-#define DMA1 ((volatile struct DMA_type *) 0x40008110)
-#define DMA2 ((volatile struct DMA_type *) 0x40008120)
-#define DMA3 ((volatile struct DMA_type *) 0x40008130)
+struct DMA_type {
+  struct DMA_CHANNEL CH[4];
+};
+
+#define DMA ((volatile struct DMA_type *) 0x40008100)
 
 //Status register / Byte count register bitfields
 #define DMA_DSR_BCR_BCR_Msk           0x00FFFFFF  //Byte count register
