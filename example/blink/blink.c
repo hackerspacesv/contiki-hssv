@@ -18,8 +18,8 @@ PROCESS_THREAD(blink, ev, data) {
   PROCESS_BEGIN();
 
   //Configure the GPIO pin connected to the on-board LED.
-  GPIO_PIN_MODE_OUTPUT(13);   //Use pin as output
-  GPIO_PIN_SET(13);           //Set pin state to logic high
+  GPIO_PIN_MODE_OUTPUT(BOARD_PIN_LED);  //Use pin as output
+  GPIO_PIN_SET(BOARD_PIN_LED);          //Set pin state to logic high
 
   //Set the event timer to 1 second.
   etimer_set(&et, CLOCK_SECOND);
@@ -29,7 +29,7 @@ PROCESS_THREAD(blink, ev, data) {
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
     etimer_reset(&et);
     //Toggle the LED pin.
-    GPIO_PIN_TOGGLE(13);
+    GPIO_PIN_TOGGLE(BOARD_PIN_LED);
   }
 
   PROCESS_END();

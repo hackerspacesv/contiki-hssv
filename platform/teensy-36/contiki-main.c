@@ -17,18 +17,14 @@
 
 #include "contiki.h"
 
-#include "mk66-port.h"
-#include "uart.h"
+#include "syscalls.h"
 
 void main() {
   //Initialize the clock library, including timers.
   clock_init();
 
-  //Configure the port multiplexing to use the UART0 alternate function on pins PTB16 and PTB17,
-  //then initialize the UART0 peripheral (used for standard output).
-  PORTB->PCR[16] = PORT_PCR_DSE_High | PORT_PCR_MUX_Alt3;   //Use PTB16 as RX
-  PORTB->PCR[17] = PORT_PCR_DSE_High | PORT_PCR_MUX_Alt3;   //Use PTB17 as TX
-  uart_init(UART0);
+  //Initialize the syscalls submodule, which implements the standard output.
+  syscalls_init();
 
   //Print the operating system version.
   PRINTF("Starting %s\n", CONTIKI_VERSION_STRING);

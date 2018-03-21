@@ -160,7 +160,7 @@ struct SIM_type {
 #define SIM_SCGC4_CMP_Enabled       (1 << 19)
 #define SIM_SCGC4_SPI0_Disabled     (0 << 22)   //SPI0 clock gate control
 #define SIM_SCGC4_SPI0_Enabled      (1 << 22)
-#define SIM_SCGC4_SPI1_Disabled     (0 << 23)   //SPI1 clock gate contro
+#define SIM_SCGC4_SPI1_Disabled     (0 << 23)   //SPI1 clock gate control
 #define SIM_SCGC4_SPI1_Enabled      (1 << 23)
 
 //System clock gating control register 5 bitfields

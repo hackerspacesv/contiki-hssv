@@ -15,8 +15,7 @@
 #include "mkl26-smc.h"
 #include "mkl26-osc.h"
 #include "mkl26-mcg.h"
-#include "mkl26-port.h"
-#include "mkl26-gpio.h"
+#include "gpio.h"
 
 //Interrupt vector handler function type.
 typedef void (* handler_t)();
@@ -59,15 +58,11 @@ void startup() {
   SIM->SCGC5 = SIM_SCGC5_PORTA_Enabled | SIM_SCGC5_PORTB_Enabled | SIM_SCGC5_PORTC_Enabled |
                SIM_SCGC5_PORTD_Enabled | SIM_SCGC5_PORTE_Enabled;
 
+#if CONTIKI_TARGET_TEENSY_LC
   //Disable JTAG port pins so the debug module doesn't keep the system from entering into VLPS mode.
-  PORTA->PCR[3] = PORT_PCR_MUX_Analog;
-  PORTA->PCR[0] = PORT_PCR_MUX_Analog;
-
-  //Set pin 17/A3 as a low level output, so the 74LV1T125 doesn't consume too much power with a
-  //floating input.
-  PORTB->PCR[1] = PORT_PCR_MUX_Gpio;
-  GPIOB->PDDR |= 1 << 1;
-  GPIOB->PCOR = 1 << 1;
+  GPIO_PIN_MODE_ANALOG(PTA3);
+  GPIO_PIN_MODE_ANALOG(PTA0);
+#endif
 
   //Enable all power modes.
   SMC->PMPROT = SMC_PMPROT_AVLP_Allowed | SMC_PMPROT_ALLS_Allowed | SMC_PMPROT_AVLLS_Allowed;
@@ -177,7 +172,9 @@ void startup() {
   //the 32kHz clock source for RTC and LPTMR to the CLKIN pin.
   SIM->SOPT1CFG |= SIM_SOPT1CFG_USSWE_W_Enable;   //Enable writing to USBSSTBY
   SIM->SOPT1 = SIM_SOPT1_USBSSTBY_Standby | SIM_SOPT1_OSC32KSEL_RTC_CLKIN;
-  PORTC->PCR[1] = PORT_PCR_MUX_Gpio;              //Set the PORTC mux to GPIO to accept clock signal
+  GPIO_PIN_MODE_INPUT(PTC1);  //Set the PTC1 pin mode to GPIO input to accept clock signal
+
+  //Note: On teensy-lc platform, the CLKIN pin is located at board pin 22.
 
   //Set the stop mode to VLPS (Very Low Power Stop). Also set the SLEEPDEEP bit in the System
   //Control Register so the stop mode becomes effective.

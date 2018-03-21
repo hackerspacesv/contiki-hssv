@@ -18,11 +18,57 @@
 #include <unistd.h>
 #include <stdint.h>
 
+#include "contiki-conf.h"
+#include "sys/cc.h"
+
+#include "gpio.h"
 #include "uart.h"
+
+#include "syscalls.h"
+
+//Module configurations.
+//----------------------
+#ifdef TEENSY_32_CONF_STDOUT_UART_ENABLED
+#define STDOUT_UART_ENABLED TEENSY_32_CONF_STDOUT_UART_ENABLED
+#else
+#define STDOUT_UART_ENABLED 0
+#endif //TEENSY_32_CONF_STDOUT_UART_ENABLED
+
+#ifdef TEENSY_32_CONF_STDOUT_UART_INSTANCE
+#define STDOUT_UART_INSTANCE CC_CONCAT_EXT_2(UART, TEENSY_32_CONF_STDOUT_UART_INSTANCE)
+#define STDOUT_UART_RX_ALT   CC_CONCAT_EXT_3(UART, TEENSY_32_CONF_STDOUT_UART_INSTANCE, _RX)
+#define STDOUT_UART_TX_ALT   CC_CONCAT_EXT_3(UART, TEENSY_32_CONF_STDOUT_UART_INSTANCE, _TX)
+#else
+#define STDOUT_UART_INSTANCE UART0
+#define STDOUT_UART_RX_ALT   UART0_RX
+#define STDOUT_UART_TX_ALT   UART0_TX
+#endif //TEENSY_32_CONF_STDOUT_UART_INSTANCE
+
+#ifdef TEENSY_32_CONF_STDOUT_UART_RX_PIN
+#define STDOUT_UART_RX_PIN TEENSY_32_CONF_STDOUT_UART_RX_PIN
+#else
+#define STDOUT_UART_RX_PIN BOARD_PIN_0
+#endif //TEENSY_32_CONF_STDOUT_UART_RX_PIN
+
+#ifdef TEENSY_32_CONF_STDOUT_UART_TX_PIN
+#define STDOUT_UART_TX_PIN TEENSY_32_CONF_STDOUT_UART_TX_PIN
+#else
+#define STDOUT_UART_TX_PIN BOARD_PIN_1
+#endif //TEENSY_32_CONF_STDOUT_UART_TX_PIN
 
 //Heap start and end locations exposed by the linker script.
 extern char __heap_start__;
 extern char __heap_end__;
+
+//Initialization function for this module.
+void syscalls_init() {
+  //Configure the port multiplexing and UART peripheral instance for use by STDOUT if enabled.
+#if STDOUT_UART_ENABLED
+  GPIO_PIN_MODE_ALT(STDOUT_UART_RX_PIN, STDOUT_UART_RX_ALT);
+  GPIO_PIN_MODE_ALT(STDOUT_UART_TX_PIN, STDOUT_UART_TX_ALT);
+  uart_init(STDOUT_UART_INSTANCE);
+#endif //STDOUT_UART_ENABLED
+}
 
 //Implementation of the sbrk system call function. This function moves the program break (which
 //marks the end of the program data space) by the increment value. Malloc depends on this function
@@ -46,15 +92,17 @@ caddr_t _sbrk(int incr) {
   return (caddr_t) prev_heap_end;
 }
 
-//Implementation of th write system call. This is used by printf to send data to the standard
+//Implementation of the write system call. This is used by printf to send data to the standard
 //output, whose content is then sent out through UART.
 int _write(int file, char *ptr, int len) {
   uint32_t i;
 
   //Only send output for the standard output and standard error file descriptors.
   if (file == STDOUT_FILENO || file == STDERR_FILENO) {
+#if STDOUT_UART_ENABLED
     for (i = 0; i < len; i++)
-      uart_tx(UART0, *ptr++);
+      uart_tx(STDOUT_UART_INSTANCE, *ptr++);
+#endif //STDOUT_UART_ENABLED
     return len;
   }
   else {

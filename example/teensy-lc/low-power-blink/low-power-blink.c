@@ -18,18 +18,18 @@ PROCESS_THREAD(low_power_blink, ev, data) {
   PROCESS_BEGIN();
 
   //Configure the GPIO pin connected to the on-board LED.
-  GPIO_PIN_MODE_OUTPUT(13);   //Use pin as output
+  GPIO_PIN_MODE_OUTPUT(BOARD_PIN_LED);  //Use pin as output
 
   for (;;) {
     //Turn on the LED.
-    GPIO_PIN_SET(13);
+    GPIO_PIN_SET(BOARD_PIN_LED);
 
     //Set the event timer to 1/10th of a second, then wait for the timer to expire.
     etimer_set(&et, CLOCK_SECOND / 10);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
     //Turn off the LED.
-    GPIO_PIN_CLEAR(13);
+    GPIO_PIN_CLEAR(BOARD_PIN_LED);
 
     //Set the event timer to 4 seconds, then wait for the timer to expire.
     etimer_set(&et, CLOCK_SECOND * 4);

@@ -18,11 +18,17 @@
 #include "contiki.h"
 
 #include "mkl26.h"
-#include "mkl26-port.h"
-#include "uart.h"
+#include "gpio.h"
 #include "lptmr.h"
 
+#include "syscalls.h"
+
 void main() {
+  //Set pin 17/A3 as a low level output, so the 74LV1T125 doesn't consume too much power with a
+  //floating input.
+  GPIO_PIN_MODE_OUTPUT(BOARD_PIN_17);
+  GPIO_PIN_CLEAR(BOARD_PIN_17);
+
   //Initialize the LPTMR peripheral driver, which provides support for clock and rtimer libraries.
   lptmr_init();
 
@@ -30,11 +36,8 @@ void main() {
   clock_init();
   rtimer_init();
 
-  //Configure the port multiplexing to use the UART0 alternate function on pins PTB16 and PTB17,
-  //then initialize the UART0 peripheral (used for standard output).
-  PORTB->PCR[16] = PORT_PCR_DSE_High | PORT_PCR_MUX_Alt3;   //Use PTB16 as RX
-  PORTB->PCR[17] = PORT_PCR_DSE_High | PORT_PCR_MUX_Alt3;   //Use PTB17 as TX
-  uart_init(UART0);
+  //Initialize the syscalls submodule, which implements the standard output.
+  syscalls_init();
 
   //Print the operating system version.
   PRINTF("Starting %s\n", CONTIKI_VERSION_STRING);

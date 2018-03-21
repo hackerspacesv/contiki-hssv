@@ -15,23 +15,26 @@ OBJCOPY = arm-none-eabi-objcopy
 CPUFLAGS += -mcpu=cortex-m4 -mthumb -mfloat-abi=soft
 CPUFLAGS += -specs=nano.specs -specs=nosys.specs
 
-#Set the C code flags.
-CFLAGS += -DMK20DX256
+#Set common C code flags.
+CFLAGS += -DMK20DX256=1
 CFLAGS += -g -ffunction-sections -fdata-sections -O2
 #CFLAGS += -Wall -g -ffunction-sections -fdata-sections -O2
 CFLAGS += $(CPUFLAGS)
 
 #Set the linker flags.
 LDFLAGS += -Wl,--gc-sections -T$(CONTIKI_CPU)/mk20dx256.ld -lc
+#LDFLAGS += -Wl,-Map=$(OBJECTDIR)/$(CONTIKI_PROJECT).map
 LDFLAGS += $(CPUFLAGS)
 
 #Configure the CPU path and source files.
-CONTIKI_CPU_DIRS += . hal dev ../kinetis-common/dev ../../contiki/cpu/arm/common/CMSIS
+CONTIKI_CPU_DIRS += . hal dev
+CONTIKI_CPU_DIRS += ../kinetis-common/dev
+CONTIKI_CPU_DIRS += ../../contiki/cpu/arm/common/CMSIS
 CONTIKI_SOURCEFILES += mk20-startup.c clock.c uart.c
 
-#Don't treat %.co and $(OBJECTDIR)/syscalls.o as intermediates (avoids deletion and re-compiling)
-.PRECIOUS: %.co
-.PRECIOUS: $(OBJECTDIR)/syscalls.o
+#Don't treat project object files and syscalls.o as intermediates (avoids deletion and recompiling).
+.SECONDARY: $(PROJECT_OBJECTFILES)
+.SECONDARY: $(OBJECTDIR)/syscalls.o
 
 #Override the link rule so gcc can be called with -specs instead of ld and also generate a .hex file
 #in the same process.

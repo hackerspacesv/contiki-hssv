@@ -29,7 +29,7 @@ And to clean all output files use the `distclean` target:
 $ make distclean
 ```
 
-# Testing.
+## Testing.
 
 You can use the teensy loader program to upload the .hex file to the board. To test power
 consumption provide power to the board through the Vin (5V) pin with an ammeter in series. Current

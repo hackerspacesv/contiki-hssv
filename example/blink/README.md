@@ -25,4 +25,6 @@ And to clean all output files use this command:
 $ make TARGET=teensy-32 distclean
 ```
 
+## Testing.
+
 You can use the teensy loader program to upload the .hex file to the board.

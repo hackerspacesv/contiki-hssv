@@ -65,7 +65,6 @@ struct UART_type {
 #define UART0 ((volatile struct UART_type *) 0x4006A000)
 #define UART1 ((volatile struct UART_type *) 0x4006B000)
 #define UART2 ((volatile struct UART_type *) 0x4006C000)
-#define UART4 ((volatile struct UART_type *) 0x400EA000)
 
 //Baud rate register high bitfields
 #define UART_BDH_SBR_Msk            0x1F      //UART baud rate bits (high)
