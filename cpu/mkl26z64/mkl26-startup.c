@@ -254,7 +254,7 @@ void __attribute__((weak, alias("unused_handler"))) port_c_d_handler();
 
 //Processor vector table, located at 0x00000000.
 static __attribute__ ((section(".vectors"), used))
-handler_t vectors[48] = {
+handler_t const vectors[48] = {
   //Core system handler vectors.
   (handler_t) &__stack_end__,   //0 - Initial stack pointer
   startup,                      //1 - Initial program counter

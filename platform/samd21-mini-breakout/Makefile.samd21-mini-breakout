@@ -1,0 +1,13 @@
+#+-------------------------------------------------------------------------------------------------+
+#| Sparkfun SAMD21G Mini Breakout platform makefile.                                               |
+#|                                                                                                 |
+#| Author: Joksan Alvarado.                                                                        |
+#+-------------------------------------------------------------------------------------------------+
+
+#Configure the target paths and source files.
+CONTIKI_TARGET_DIRS += .
+CONTIKI_SOURCEFILES += contiki-main.c
+
+#Include the CPU makefile.
+CONTIKI_CPU = $(shell realpath --relative-to=. $(CONTIKI)/../cpu/atsamd21g18au)
+include $(CONTIKI_CPU)/Makefile.atsamd21g18au

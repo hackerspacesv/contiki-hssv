@@ -242,7 +242,7 @@ void __attribute__((weak, alias("unused_handler"))) can_1_wake_up_handler();
 
 //Processor vector table, located at 0x00000000.
 static __attribute__ ((section(".vectors"), used))
-handler_t vectors[116] = {
+handler_t const vectors[116] = {
   //Core system handler vectors.
   (handler_t) &__stack_end__,   //0 - Initial stack pointer
   startup,                      //1 - Initial program counter

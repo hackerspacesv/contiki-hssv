@@ -1,0 +1,73 @@
+#+-------------------------------------------------------------------------------------------------+
+#| ATSAMD21G18AU cpu makefile.                                                                     |
+#|                                                                                                 |
+#| Author: Joksan Alvarado.                                                                        |
+#+-------------------------------------------------------------------------------------------------+
+
+#Set the toolchain program names.
+CC = arm-none-eabi-gcc
+AR = arm-none-eabi-ar
+AS = arm-none-eabi-as
+LD = arm-none-eabi-ld
+OBJCOPY = arm-none-eabi-objcopy
+
+#Set the processor related flags (common to C code and linker).
+CPUFLAGS += -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft
+CPUFLAGS += -specs=nano.specs -specs=nosys.specs
+
+#Set common C code flags.
+CFLAGS += -D__SAMD21G18AU__=1
+CFLAGS += -g -ffunction-sections -fdata-sections -O2
+#CFLAGS += -Wall -g -ffunction-sections -fdata-sections -O2
+CFLAGS += $(CPUFLAGS)
+
+#Set the linker flags.
+LDFLAGS += -Wl,--gc-sections -T$(CONTIKI_CPU)/atsamd21g18au.ld -lc
+#LDFLAGS += -Wl,-Map=$(OBJECTDIR)/$(CONTIKI_PROJECT).map
+LDFLAGS += $(CPUFLAGS)
+
+#Configure the CPU path and source files.
+CONTIKI_CPU_DIRS += .
+CONTIKI_CPU_DIRS += samd21-dfp/samd21a/include
+CONTIKI_CPU_DIRS += ../../contiki/cpu/arm/common/CMSIS
+CONTIKI_SOURCEFILES += samd21-startup.c
+
+#Add objcopy to the verbosity control.
+ifeq ($(V),1)
+  TRACE_OBJCOPY =
+else
+  TRACE_OBJCOPY = @echo "  OBJCOPY  " $@
+endif
+
+#Don't treat project object files and syscalls.o as intermediates (avoids deletion and recompiling).
+.SECONDARY: $(PROJECT_OBJECTFILES)
+.SECONDARY: $(OBJECTDIR)/syscalls.o
+
+#Override the link rule so gcc can be called with the -specs switch instead of ld when linking the
+#project. Also create a binary image in the process.
+CUSTOM_RULE_LINK = 1
+%.$(TARGET): %.$(TARGET).elf %.$(TARGET).bin
+	cp $< $@
+
+#This rule links the project in a similar way as the default link rule for contiki.
+%.$(TARGET).elf: %.co $(PROJECT_OBJECTFILES) $(PROJECT_LIBRARIES) contiki-$(TARGET).a \
+                 $(OBJECTDIR)/syscalls.o
+	$(TRACE_LD)
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_STARTFILES) ${filter-out %.a,$^} \
+	    ${filter %.a,$^} $(TARGET_LIBFILES) -o $@
+
+#Add the .elf file to the clean list.
+CLEAN += *.$(TARGET).elf
+
+#This rule creates a binary image from the .elf file. Its output is made precious so it doesn't get
+#deleted even if it's an intermediate.
+.PRECIOUS: %.$(TARGET).bin
+%.$(TARGET).bin: %.$(TARGET).elf
+	$(TRACE_OBJCOPY)
+	$(Q)$(OBJCOPY) $< -O binary $@
+
+#This rule allows to flash the device. Please make sure that bossac is present in the environment
+#PATH variable before invoking this target.
+.PHONY: flash
+flash: $(CONTIKI_PROJECT).$(TARGET).bin
+	bossac -ewvR $<

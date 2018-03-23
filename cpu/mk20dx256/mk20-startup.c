@@ -206,7 +206,7 @@ void __attribute__((weak, alias("unused_handler"))) software_interrupt_handler()
 
 //Processor vector table, located at 0x00000000.
 static __attribute__ ((section(".vectors"), used))
-handler_t vectors[111] = {
+handler_t const vectors[111] = {
   //Core system handler vectors.
   (handler_t) &__stack_end__,   //0 - Initial stack pointer
   startup,                      //1 - Initial program counter
