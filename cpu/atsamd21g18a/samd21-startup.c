@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------------------------------------+
-//| ATSAMD21G18AU microcontroller initialization code.                                             |
+//| ATSAMD21G18A microcontroller initialization code.                                              |
 //|                                                                                                |
 //| This file implements very basic microcontroller code infrastructure such as the vector table,  |
 //| processor and peripheral initialization and memory initialization.                             |
@@ -87,8 +87,6 @@ void __attribute__((weak, alias("unused_handler"))) tcc2_handler();
 void __attribute__((weak, alias("unused_handler"))) tc3_handler();
 void __attribute__((weak, alias("unused_handler"))) tc4_handler();
 void __attribute__((weak, alias("unused_handler"))) tc5_handler();
-void __attribute__((weak, alias("unused_handler"))) tc6_handler();
-void __attribute__((weak, alias("unused_handler"))) tc7_handler();
 void __attribute__((weak, alias("unused_handler"))) adc_handler();
 void __attribute__((weak, alias("unused_handler"))) ac_handler();
 void __attribute__((weak, alias("unused_handler"))) dac_handler();
@@ -140,8 +138,8 @@ handler_t const vectors[44] = {
   tc3_handler,                  //34 - Timer counter 3
   tc4_handler,                  //35 - Timer counter 4
   tc5_handler,                  //36 - Timer counter 5
-  tc6_handler,                  //37 - Timer counter 6
-  tc7_handler,                  //38 - Timer counter 7
+  unused_handler,               //37
+  unused_handler,               //38
   adc_handler,                  //39 - Analog to digital converter
   ac_handler,                   //40 - Analog comparator
   dac_handler,                  //41 - Digital to analog converter

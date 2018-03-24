@@ -1,5 +1,5 @@
 #+-------------------------------------------------------------------------------------------------+
-#| ATSAMD21G18AU cpu makefile.                                                                     |
+#| ATSAMD21G18A cpu makefile.                                                                      |
 #|                                                                                                 |
 #| Author: Joksan Alvarado.                                                                        |
 #+-------------------------------------------------------------------------------------------------+
@@ -16,13 +16,13 @@ CPUFLAGS += -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft
 CPUFLAGS += -specs=nano.specs -specs=nosys.specs
 
 #Set common C code flags.
-CFLAGS += -D__SAMD21G18AU__=1
+CFLAGS += -D__SAMD21G18A__=1
 CFLAGS += -g -ffunction-sections -fdata-sections -O2
 #CFLAGS += -Wall -g -ffunction-sections -fdata-sections -O2
 CFLAGS += $(CPUFLAGS)
 
 #Set the linker flags.
-LDFLAGS += -Wl,--gc-sections -T$(CONTIKI_CPU)/atsamd21g18au.ld -lc
+LDFLAGS += -Wl,--gc-sections -T$(CONTIKI_CPU)/atsamd21g18a.ld -lc
 #LDFLAGS += -Wl,-Map=$(OBJECTDIR)/$(CONTIKI_PROJECT).map
 LDFLAGS += $(CPUFLAGS)
 
@@ -44,12 +44,14 @@ endif
 .SECONDARY: $(OBJECTDIR)/syscalls.o
 
 #Override the link rule so gcc can be called with the -specs switch instead of ld when linking the
-#project. Also create a binary image in the process.
+#project. Also create a .bin image in the process.
 CUSTOM_RULE_LINK = 1
 %.$(TARGET): %.$(TARGET).elf %.$(TARGET).bin
 	cp $< $@
 
-#This rule links the project in a similar way as the default link rule for contiki.
+#This rule links the project in a similar way as the default link rule for contiki. Its output is
+#made precious so it doesn't get deleted even if it's an intermediate.
+.PRECIOUS: %.$(TARGET).elf
 %.$(TARGET).elf: %.co $(PROJECT_OBJECTFILES) $(PROJECT_LIBRARIES) contiki-$(TARGET).a \
                  $(OBJECTDIR)/syscalls.o
 	$(TRACE_LD)
@@ -59,7 +61,7 @@ CUSTOM_RULE_LINK = 1
 #Add the .elf file to the clean list.
 CLEAN += *.$(TARGET).elf
 
-#This rule creates a binary image from the .elf file. Its output is made precious so it doesn't get
+#This rule creates a .bin image from the .elf file. Its output is made precious so it doesn't get
 #deleted even if it's an intermediate.
 .PRECIOUS: %.$(TARGET).bin
 %.$(TARGET).bin: %.$(TARGET).elf

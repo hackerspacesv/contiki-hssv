@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Header file for SAMD21G18AU
+ * \brief Header file for SAMD21G18A
  *
  * Copyright (c) 2017 Microchip Technology Inc.
  *
@@ -27,13 +27,13 @@
  *
  */
 
-#ifndef _SAMD21G18AU_
-#define _SAMD21G18AU_
+#ifndef _SAMD21G18A_
+#define _SAMD21G18A_
 
 /**
  * \ingroup SAMD21_definitions
- * \addtogroup SAMD21G18AU_definitions SAMD21G18AU definitions
- * This file defines all structures and symbols for SAMD21G18AU:
+ * \addtogroup SAMD21G18A_definitions SAMD21G18A definitions
+ * This file defines all structures and symbols for SAMD21G18A:
  *   - registers and bitfields
  *   - peripheral base address
  *   - peripheral ID
@@ -82,9 +82,9 @@ typedef volatile       uint8_t  RwReg8;  /**< Read-Write  8-bit register (volati
 #endif /* SKIP_INTEGER_LITERALS */
 
 /* ************************************************************************** */
-/**  CMSIS DEFINITIONS FOR SAMD21G18AU */
+/**  CMSIS DEFINITIONS FOR SAMD21G18A */
 /* ************************************************************************** */
-/** \defgroup SAMD21G18AU_cmsis CMSIS Definitions */
+/** \defgroup SAMD21G18A_cmsis CMSIS Definitions */
 /*@{*/
 
 /** Interrupt Number Definition */
@@ -96,35 +96,33 @@ typedef enum IRQn
   SVCall_IRQn              = -5, /**< 11 Cortex-M0+ SV Call Interrupt           */
   PendSV_IRQn              = -2, /**< 14 Cortex-M0+ Pend SV Interrupt           */
   SysTick_IRQn             = -1, /**< 15 Cortex-M0+ System Tick Interrupt       */
-  /******  SAMD21G18AU-specific Interrupt Numbers ***********************/
-  PM_IRQn                  =  0, /**<  0 SAMD21G18AU Power Manager (PM) */
-  SYSCTRL_IRQn             =  1, /**<  1 SAMD21G18AU System Control (SYSCTRL) */
-  WDT_IRQn                 =  2, /**<  2 SAMD21G18AU Watchdog Timer (WDT) */
-  RTC_IRQn                 =  3, /**<  3 SAMD21G18AU Real-Time Counter (RTC) */
-  EIC_IRQn                 =  4, /**<  4 SAMD21G18AU External Interrupt Controller (EIC) */
-  NVMCTRL_IRQn             =  5, /**<  5 SAMD21G18AU Non-Volatile Memory Controller (NVMCTRL) */
-  DMAC_IRQn                =  6, /**<  6 SAMD21G18AU Direct Memory Access Controller (DMAC) */
-  USB_IRQn                 =  7, /**<  7 SAMD21G18AU Universal Serial Bus (USB) */
-  EVSYS_IRQn               =  8, /**<  8 SAMD21G18AU Event System Interface (EVSYS) */
-  SERCOM0_IRQn             =  9, /**<  9 SAMD21G18AU Serial Communication Interface 0 (SERCOM0) */
-  SERCOM1_IRQn             = 10, /**< 10 SAMD21G18AU Serial Communication Interface 1 (SERCOM1) */
-  SERCOM2_IRQn             = 11, /**< 11 SAMD21G18AU Serial Communication Interface 2 (SERCOM2) */
-  SERCOM3_IRQn             = 12, /**< 12 SAMD21G18AU Serial Communication Interface 3 (SERCOM3) */
-  SERCOM4_IRQn             = 13, /**< 13 SAMD21G18AU Serial Communication Interface 4 (SERCOM4) */
-  SERCOM5_IRQn             = 14, /**< 14 SAMD21G18AU Serial Communication Interface 5 (SERCOM5) */
-  TCC0_IRQn                = 15, /**< 15 SAMD21G18AU Timer Counter Control 0 (TCC0) */
-  TCC1_IRQn                = 16, /**< 16 SAMD21G18AU Timer Counter Control 1 (TCC1) */
-  TCC2_IRQn                = 17, /**< 17 SAMD21G18AU Timer Counter Control 2 (TCC2) */
-  TC3_IRQn                 = 18, /**< 18 SAMD21G18AU Basic Timer Counter 3 (TC3) */
-  TC4_IRQn                 = 19, /**< 19 SAMD21G18AU Basic Timer Counter 4 (TC4) */
-  TC5_IRQn                 = 20, /**< 20 SAMD21G18AU Basic Timer Counter 5 (TC5) */
-  TC6_IRQn                 = 21, /**< 21 SAMD21G18AU Basic Timer Counter 6 (TC6) */
-  TC7_IRQn                 = 22, /**< 22 SAMD21G18AU Basic Timer Counter 7 (TC7) */
-  ADC_IRQn                 = 23, /**< 23 SAMD21G18AU Analog Digital Converter (ADC) */
-  AC_IRQn                  = 24, /**< 24 SAMD21G18AU Analog Comparators (AC) */
-  DAC_IRQn                 = 25, /**< 25 SAMD21G18AU Digital Analog Converter (DAC) */
-  PTC_IRQn                 = 26, /**< 26 SAMD21G18AU Peripheral Touch Controller (PTC) */
-  I2S_IRQn                 = 27, /**< 27 SAMD21G18AU Inter-IC Sound Interface (I2S) */
+  /******  SAMD21G18A-specific Interrupt Numbers ***********************/
+  PM_IRQn                  =  0, /**<  0 SAMD21G18A Power Manager (PM) */
+  SYSCTRL_IRQn             =  1, /**<  1 SAMD21G18A System Control (SYSCTRL) */
+  WDT_IRQn                 =  2, /**<  2 SAMD21G18A Watchdog Timer (WDT) */
+  RTC_IRQn                 =  3, /**<  3 SAMD21G18A Real-Time Counter (RTC) */
+  EIC_IRQn                 =  4, /**<  4 SAMD21G18A External Interrupt Controller (EIC) */
+  NVMCTRL_IRQn             =  5, /**<  5 SAMD21G18A Non-Volatile Memory Controller (NVMCTRL) */
+  DMAC_IRQn                =  6, /**<  6 SAMD21G18A Direct Memory Access Controller (DMAC) */
+  USB_IRQn                 =  7, /**<  7 SAMD21G18A Universal Serial Bus (USB) */
+  EVSYS_IRQn               =  8, /**<  8 SAMD21G18A Event System Interface (EVSYS) */
+  SERCOM0_IRQn             =  9, /**<  9 SAMD21G18A Serial Communication Interface 0 (SERCOM0) */
+  SERCOM1_IRQn             = 10, /**< 10 SAMD21G18A Serial Communication Interface 1 (SERCOM1) */
+  SERCOM2_IRQn             = 11, /**< 11 SAMD21G18A Serial Communication Interface 2 (SERCOM2) */
+  SERCOM3_IRQn             = 12, /**< 12 SAMD21G18A Serial Communication Interface 3 (SERCOM3) */
+  SERCOM4_IRQn             = 13, /**< 13 SAMD21G18A Serial Communication Interface 4 (SERCOM4) */
+  SERCOM5_IRQn             = 14, /**< 14 SAMD21G18A Serial Communication Interface 5 (SERCOM5) */
+  TCC0_IRQn                = 15, /**< 15 SAMD21G18A Timer Counter Control 0 (TCC0) */
+  TCC1_IRQn                = 16, /**< 16 SAMD21G18A Timer Counter Control 1 (TCC1) */
+  TCC2_IRQn                = 17, /**< 17 SAMD21G18A Timer Counter Control 2 (TCC2) */
+  TC3_IRQn                 = 18, /**< 18 SAMD21G18A Basic Timer Counter 3 (TC3) */
+  TC4_IRQn                 = 19, /**< 19 SAMD21G18A Basic Timer Counter 4 (TC4) */
+  TC5_IRQn                 = 20, /**< 20 SAMD21G18A Basic Timer Counter 5 (TC5) */
+  ADC_IRQn                 = 23, /**< 23 SAMD21G18A Analog Digital Converter (ADC) */
+  AC_IRQn                  = 24, /**< 24 SAMD21G18A Analog Comparators (AC) */
+  DAC_IRQn                 = 25, /**< 25 SAMD21G18A Digital Analog Converter (DAC) */
+  PTC_IRQn                 = 26, /**< 26 SAMD21G18A Peripheral Touch Controller (PTC) */
+  I2S_IRQn                 = 27, /**< 27 SAMD21G18A Inter-IC Sound Interface (I2S) */
 
   PERIPH_COUNT_IRQn        = 28  /**< Number of peripheral IDs */
 } IRQn_Type;
@@ -173,8 +171,8 @@ typedef struct _DeviceVectors
   void* pfnTC3_Handler;                   /* 18 Basic Timer Counter 3 */
   void* pfnTC4_Handler;                   /* 19 Basic Timer Counter 4 */
   void* pfnTC5_Handler;                   /* 20 Basic Timer Counter 5 */
-  void* pfnTC6_Handler;                   /* 21 Basic Timer Counter 6 */
-  void* pfnTC7_Handler;                   /* 22 Basic Timer Counter 7 */
+  void* pvReserved21;
+  void* pvReserved22;
   void* pfnADC_Handler;                   /* 23 Analog Digital Converter */
   void* pfnAC_Handler;                    /* 24 Analog Comparators */
   void* pfnDAC_Handler;                   /* 25 Digital Analog Converter */
@@ -213,8 +211,6 @@ void TCC2_Handler                ( void );
 void TC3_Handler                 ( void );
 void TC4_Handler                 ( void );
 void TC5_Handler                 ( void );
-void TC6_Handler                 ( void );
-void TC7_Handler                 ( void );
 void ADC_Handler                 ( void );
 void AC_Handler                  ( void );
 void DAC_Handler                 ( void );
@@ -244,9 +240,9 @@ void I2S_Handler                 ( void );
 /*@}*/
 
 /* ************************************************************************** */
-/**  SOFTWARE PERIPHERAL API DEFINITION FOR SAMD21G18AU */
+/**  SOFTWARE PERIPHERAL API DEFINITION FOR SAMD21G18A */
 /* ************************************************************************** */
-/** \defgroup SAMD21G18AU_api Peripheral Software API */
+/** \defgroup SAMD21G18A_api Peripheral Software API */
 /*@{*/
 
 #include "component/ac.h"
@@ -274,9 +270,9 @@ void I2S_Handler                 ( void );
 /*@}*/
 
 /* ************************************************************************** */
-/**  REGISTERS ACCESS DEFINITIONS FOR SAMD21G18AU */
+/**  REGISTERS ACCESS DEFINITIONS FOR SAMD21G18A */
 /* ************************************************************************** */
-/** \defgroup SAMD21G18AU_reg Registers Access Definitions */
+/** \defgroup SAMD21G18A_reg Registers Access Definitions */
 /*@{*/
 
 #include "instance/ac.h"
@@ -307,8 +303,6 @@ void I2S_Handler                 ( void );
 #include "instance/tc3.h"
 #include "instance/tc4.h"
 #include "instance/tc5.h"
-#include "instance/tc6.h"
-#include "instance/tc7.h"
 #include "instance/tcc0.h"
 #include "instance/tcc1.h"
 #include "instance/tcc2.h"
@@ -317,9 +311,9 @@ void I2S_Handler                 ( void );
 /*@}*/
 
 /* ************************************************************************** */
-/**  PERIPHERAL ID DEFINITIONS FOR SAMD21G18AU */
+/**  PERIPHERAL ID DEFINITIONS FOR SAMD21G18A */
 /* ************************************************************************** */
-/** \defgroup SAMD21G18AU_id Peripheral Ids Definitions */
+/** \defgroup SAMD21G18A_id Peripheral Ids Definitions */
 /*@{*/
 
 // Peripheral instances on HPB0 bridge
@@ -356,8 +350,6 @@ void I2S_Handler                 ( void );
 #define ID_TC3           75 /**< \brief Basic Timer Counter 3 (TC3) */
 #define ID_TC4           76 /**< \brief Basic Timer Counter 4 (TC4) */
 #define ID_TC5           77 /**< \brief Basic Timer Counter 5 (TC5) */
-#define ID_TC6           78 /**< \brief Basic Timer Counter 6 (TC6) */
-#define ID_TC7           79 /**< \brief Basic Timer Counter 7 (TC7) */
 #define ID_ADC           80 /**< \brief Analog Digital Converter (ADC) */
 #define ID_AC            81 /**< \brief Analog Comparators (AC) */
 #define ID_DAC           82 /**< \brief Digital Analog Converter (DAC) */
@@ -368,9 +360,9 @@ void I2S_Handler                 ( void );
 /*@}*/
 
 /* ************************************************************************** */
-/**  BASE ADDRESS DEFINITIONS FOR SAMD21G18AU */
+/**  BASE ADDRESS DEFINITIONS FOR SAMD21G18A */
 /* ************************************************************************** */
-/** \defgroup SAMD21G18AU_base Peripheral Base Address Definitions */
+/** \defgroup SAMD21G18A_base Peripheral Base Address Definitions */
 /*@{*/
 
 #if defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)
@@ -411,8 +403,6 @@ void I2S_Handler                 ( void );
 #define TC3                           (0x42002C00) /**< \brief (TC3) APB Base Address */
 #define TC4                           (0x42003000) /**< \brief (TC4) APB Base Address */
 #define TC5                           (0x42003400) /**< \brief (TC5) APB Base Address */
-#define TC6                           (0x42003800) /**< \brief (TC6) APB Base Address */
-#define TC7                           (0x42003C00) /**< \brief (TC7) APB Base Address */
 #define TCC0                          (0x42002000) /**< \brief (TCC0) APB Base Address */
 #define TCC1                          (0x42002400) /**< \brief (TCC1) APB Base Address */
 #define TCC2                          (0x42002800) /**< \brief (TCC2) APB Base Address */
@@ -516,10 +506,8 @@ void I2S_Handler                 ( void );
 #define TC3               ((Tc       *)0x42002C00UL) /**< \brief (TC3) APB Base Address */
 #define TC4               ((Tc       *)0x42003000UL) /**< \brief (TC4) APB Base Address */
 #define TC5               ((Tc       *)0x42003400UL) /**< \brief (TC5) APB Base Address */
-#define TC6               ((Tc       *)0x42003800UL) /**< \brief (TC6) APB Base Address */
-#define TC7               ((Tc       *)0x42003C00UL) /**< \brief (TC7) APB Base Address */
-#define TC_INST_NUM       5                          /**< \brief (TC) Number of instances */
-#define TC_INSTS          { TC3, TC4, TC5, TC6, TC7 } /**< \brief (TC) Instances List */
+#define TC_INST_NUM       3                          /**< \brief (TC) Number of instances */
+#define TC_INSTS          { TC3, TC4, TC5 }          /**< \brief (TC) Instances List */
 
 #define TCC0              ((Tcc      *)0x42002000UL) /**< \brief (TCC0) APB Base Address */
 #define TCC1              ((Tcc      *)0x42002400UL) /**< \brief (TCC1) APB Base Address */
@@ -539,16 +527,16 @@ void I2S_Handler                 ( void );
 /*@}*/
 
 /* ************************************************************************** */
-/**  PORT DEFINITIONS FOR SAMD21G18AU */
+/**  PORT DEFINITIONS FOR SAMD21G18A */
 /* ************************************************************************** */
-/** \defgroup SAMD21G18AU_port PORT Definitions */
+/** \defgroup SAMD21G18A_port PORT Definitions */
 /*@{*/
 
-#include "pio/samd21g18au.h"
+#include "pio/samd21g18a.h"
 /*@}*/
 
 /* ************************************************************************** */
-/**  MEMORY MAPPING DEFINITIONS FOR SAMD21G18AU */
+/**  MEMORY MAPPING DEFINITIONS FOR SAMD21G18A */
 /* ************************************************************************** */
 
 #define FLASH_SIZE            _UL_(0x00040000) /* 256 kB */
@@ -565,12 +553,12 @@ void I2S_Handler                 ( void );
 #define HPB2_ADDR             _UL_(0x42000000) /**< HPB2 base address */
 #define PPB_ADDR              _UL_(0xE0000000) /**< PPB base address */
 
-#define DSU_DID_RESETVALUE    _UL_(0x1001030F)
+#define DSU_DID_RESETVALUE    _UL_(0x10010305)
 #define EIC_EXTINT_NUM        16
 #define PORT_GROUPS           2
 
 /* ************************************************************************** */
-/**  ELECTRICAL DEFINITIONS FOR SAMD21G18AU */
+/**  ELECTRICAL DEFINITIONS FOR SAMD21G18A */
 /* ************************************************************************** */
 
 
@@ -580,4 +568,4 @@ void I2S_Handler                 ( void );
 
 /*@}*/
 
-#endif /* SAMD21G18AU_H */
+#endif /* SAMD21G18A_H */
