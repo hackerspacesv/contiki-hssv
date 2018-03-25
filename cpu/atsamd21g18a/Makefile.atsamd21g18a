@@ -27,7 +27,7 @@ LDFLAGS += -Wl,--gc-sections -T$(CONTIKI_CPU)/atsamd21g18a.ld -lc
 LDFLAGS += $(CPUFLAGS)
 
 #Configure the CPU path and source files.
-CONTIKI_CPU_DIRS += .
+CONTIKI_CPU_DIRS += . dev
 CONTIKI_CPU_DIRS += samd21-dfp/samd21a/include
 CONTIKI_CPU_DIRS += ../../contiki/cpu/arm/common/CMSIS
 CONTIKI_SOURCEFILES += samd21-startup.c
