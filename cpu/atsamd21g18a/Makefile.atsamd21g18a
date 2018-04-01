@@ -30,7 +30,8 @@ LDFLAGS += $(CPUFLAGS)
 CONTIKI_CPU_DIRS += . dev
 CONTIKI_CPU_DIRS += samd21-dfp/samd21a/include
 CONTIKI_CPU_DIRS += ../../contiki/cpu/arm/common/CMSIS
-CONTIKI_SOURCEFILES += samd21-startup.c
+CONTIKI_SOURCEFILES += samd21-startup.c clock.c rtimer-arch.c
+CONTIKI_SOURCEFILES += rtc.c evsys.c
 
 #Add objcopy to the verbosity control.
 ifeq ($(V),1)

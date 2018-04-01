@@ -9,6 +9,8 @@
 
 #include <stdint.h>
 
+#include "contiki-conf.h"
+
 #include "samd21.h"
 
 //Interrupt vector handler function type.
@@ -31,6 +33,70 @@ extern void main();
 void startup() {
   const uint32_t *flash;
   uint32_t *sram;
+
+  //Common initialization.
+  //------------------------------------------------------------------------------------------------
+
+  //Configure the XOSC32K oscillator. Set an startup time of 2048 OSCULP32K cycles, keep the
+  //oscillator enabled in standby, enable amplitude control, enable crystal oscillator pins.
+  SYSCTRL->XOSC32K.reg = SYSCTRL_XOSC32K_STARTUP(2) | SYSCTRL_XOSC32K_RUNSTDBY |
+                         SYSCTRL_XOSC32K_AAMPEN | SYSCTRL_XOSC32K_EN32K | SYSCTRL_XOSC32K_XTALEN;
+
+  //Once configured, enable the oscillator without affecting the other bits.
+  SYSCTRL->XOSC32K.reg |= SYSCTRL_XOSC32K_ENABLE;
+
+  //Wait for the XOSC32K oscillator to be ready.
+  while ((SYSCTRL->PCLKSR.reg & SYSCTRL_PCLKSR_XOSC32KRDY) == 0);
+
+  //Set the generic clock generator 1 to divide by 1.
+  GCLK->GENDIV.reg = GCLK_GENDIV_DIV(1) | GCLK_GENDIV_ID(1);
+
+  //Configure the generic clock generator 1 to use XOSC32K as its source. Keep defaults.
+  GCLK->GENCTRL.reg = GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_XOSC32K | GCLK_GENCTRL_ID(1);
+
+  //Power profile based initialization.
+  //------------------------------------------------------------------------------------------------
+
+#if SAMD21_POWER_PROFILE  == SAMD21_POWER_PROFILE_PERFORMANCE_48MHZ
+  //Set the DFLL48M generic clock to use the generic clock generator 1.
+  GCLK->CLKCTRL.reg = GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_DFLL48 | GCLK_CLKCTRL_GEN_GCLK1;
+
+  //Enable the DFLL48M before accessing other registers.
+  SYSCTRL->DFLLCTRL.reg = SYSCTRL_DFLLCTRL_ENABLE;
+
+  //Configure the DFLL48M to lock as fast as possible (using the maximum allowed values at 50%)
+  //using a multiplication factor of 1465 so that output frequency is 32.768kHz * 1465 = 48.005MHz.
+  SYSCTRL->DFLLMUL.reg = SYSCTRL_DFLLMUL_CSTEP(31) | SYSCTRL_DFLLMUL_FSTEP(511) |
+                         SYSCTRL_DFLLMUL_MUL(1465);
+
+  //Configure the DFLL48M to operate in closed loop (use external reference), wait for lock and
+  //disable quick locking. By setting the mode bit the closed loop operation is started.
+  SYSCTRL->DFLLCTRL.reg |= SYSCTRL_DFLLCTRL_WAITLOCK | SYSCTRL_DFLLCTRL_QLDIS |
+                           SYSCTRL_DFLLCTRL_MODE;
+
+  //Wait for the DFLL48M to perform the coarse lock and then the fine lock.
+  while ((SYSCTRL->PCLKSR.reg & SYSCTRL_PCLKSR_DFLLLCKC) == 0);
+  while ((SYSCTRL->PCLKSR.reg & SYSCTRL_PCLKSR_DFLLLCKF) == 0);
+
+  //Set the generic clock generator 0 to divide by 1.
+  GCLK->GENDIV.reg = GCLK_GENDIV_ID(0) | GCLK_GENDIV_DIV(1);
+
+  //Set internal flash timing before switching clocks to 1 wait state. Keep defaults and don't
+  //disable manual write.
+  NVMCTRL->CTRLB.reg = NVMCTRL_CTRLB_MANW | NVMCTRL_CTRLB_RWS(1);
+
+  //Configure the generic clock generator 0 to use DFLL48M as its source. Keep defaults.
+  GCLK->GENCTRL.reg = GCLK_GENCTRL_GENEN | GCLK_GENCTRL_SRC_DFLL48M | GCLK_GENCTRL_ID(0);
+
+#elif SAMD21_POWER_PROFILE == SAMD21_POWER_PROFILE_LOWPOWER_4MHZ
+  //Simply reconfigure the OSC8M oscillator to run the system at 4MHz.
+  SYSCTRL->OSC8M.bit.PRESC = 1;     //Divide by 2 so Freq = 8MHz / 2 = 4MHz
+  SYSCTRL->OSC8M.bit.ONDEMAND = 1;  //Turn on demand mode (disable when not required)
+  SYSCTRL->OSC8M.bit.RUNSTDBY = 0;  //Do not run in standby (saves power)
+
+  //Set the SLEEPDEEP bit in the System Control Register to enable STANDBY mode.
+  SCB->SCR = SCB_SCR_SLEEPDEEP_Msk;
+#endif
 
   //Memory initialization.
   //------------------------------------------------------------------------------------------------

@@ -20,7 +20,18 @@
 //Clock library configuration
 //--------------------------------------------------------------------------------------------------
 
+#define CLOCK_CONF_SECOND 128
+
 typedef uint32_t clock_time_t;
+
+//Rtimer library configuration
+//--------------------------------------------------------------------------------------------------
+
+#define RTIMER_ARCH_SECOND 16384
+
+typedef uint32_t rtimer_clock_t;
+
+#define RTIMER_CLOCK_DIFF(a,b) ((int32_t)((a)-(b)))
 
 //Unused configurations
 //--------------------------------------------------------------------------------------------------

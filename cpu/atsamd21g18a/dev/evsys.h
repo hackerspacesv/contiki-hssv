@@ -1,12 +1,14 @@
 //+------------------------------------------------------------------------------------------------+
-//| Platform configuration file for Sparkfun SAMD21G Mini Breakout.                                |
+//| EVSYS peripheral driver for ATSAMD21G18A MCU.                                                  |
+//|                                                                                                |
+//| This driver provides event detection interrupt services for the RTC peripheral driver.         |
 //|                                                                                                |
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
-#ifndef PLATFORM_CONF_H_
-#define PLATFORM_CONF_H_
+#ifndef EVSYS_H_
+#define EVSYS_H_
 
-#include "cpu-conf.h"
+void evsys_init();
 
-#endif //PLATFORM_CONF_H_
+#endif //EVSYS_H_

@@ -60,7 +60,7 @@ static volatile lptmr_clock_t rtimer_next;    //Next rtimer library interrupt ti
 static volatile bool rtimer_req = false;      //Indicates wether an rtimer interrupt is requested
 
 //This macro compares two lptmr_clock_t values called 'a' and 'b', returning true if 'a' is less
-//than b (that is, time 'a' comes before time 'b').
+//than 'b' (that is, time 'a' comes before time 'b').
 #define LPTMR_LT(a, b) (a.i32 - b.i32 < 0)
 
 //This macro calculates the amount of LPTMR timer ticks per clock library tick.
