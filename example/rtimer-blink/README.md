@@ -1,29 +1,27 @@
-# Blink example.
+# Blink example using Contiki's rtimer library.
 
-This extremely simple example shows how to blink an LED using a Contiki event timer (`etimer`) and
-the GPIO driver library. It serves as a general test for the compilation chain and basic system
-support for Contiki too.
+This alternate blink example uses the `rtimer` library instead of `etimer`. This aids in testing
+because `rtimer` doesn't depend on the `clock` module as `etimer` does.
 
 ## Building.
 
-To compile this example, simply provide a target name (e.g. `teensy-lc`, `teensy-32`, `teensy-36` or
-`samd21-mini-breakout`)
+To compile this example, simply provide a target name (e.g. `teensy-lc` or `samd21-mini-breakout`)
 to the make command:
 
 ```
-$ make TARGET=teensy-32
+$ make TARGET=teensy-lc
 ```
 
-You can clean all generated files (except .elf and .hex) with this command:
+You can clean all generated files (except .elf and .hex) with the `clean` target:
 
 ```
-$ make TARGET=teensy-32 clean
+$ make TARGET=teensy-lc clean
 ```
 
-And to clean all output files use this command:
+And to clean all output files use the `distclean` target:
 
 ```
-$ make TARGET=teensy-32 distclean
+$ make TARGET=teensy-lc distclean
 ```
 
 ## Testing on Teensy.

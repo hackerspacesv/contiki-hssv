@@ -4,17 +4,21 @@
 //| Author: Joksan Alvarado.                                                                       |
 //+------------------------------------------------------------------------------------------------+
 
+#include "contiki-conf.h"
+
 #include "mkl26-sim.h"
 #include "mkl26-uart0.h"
 
-#if defined(MKL26_POWER_PROFILE_PERFORMANCE_48MHZ_PLL)
+#include "uart.h"
+
+#if MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_PERFORMANCE_48MHZ_PLL
   //Performance profile configuration
   #define UART0_CLOCK_SOURCE SIM_SOPT2_UART0SRC_FLL_PLL_Div2  //Use PLL clock divided by 2
   #define UART0_C5_VAL UART0_C5_BOTHEDGE_Rising               //Use single edge sampling
   #define UART0_OSR 15                                        //Use an oversampling ratio of 16
   #define UART0_SBR 26                                        //(96MHz / 2) / 16 / 26 = 115.384kbps
-#elif defined(MKL26_POWER_PROFILE_LOWPOWER_4MHZ_INTREF) ||\
-      defined(MKL26_POWER_PROFILE_LOWPOWER_4MHZ_EXTREF)
+#elif MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_LOWPOWER_4MHZ_INTREF ||\
+      MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_LOWPOWER_4MHZ_EXTREF
   //Low power profile configuration
   #define UART0_CLOCK_SOURCE SIM_SOPT2_UART0SRC_MCGIRCLK      //Use 4MHz internal reference clock
   #define UART0_C5_VAL UART0_C5_BOTHEDGE_Both                 //Use both edge sampling

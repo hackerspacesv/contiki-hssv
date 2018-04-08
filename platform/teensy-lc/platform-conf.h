@@ -7,6 +7,9 @@
 #ifndef PLATFORM_CONF_H_
 #define PLATFORM_CONF_H_
 
+//Include the cpu configuration header.
+#include "cpu-conf.h"
+
 //Configurations for standard output through UART.
 //------------------------------------------------
 #ifndef TEENSY_LC_CONF_STDOUT_UART_ENABLED

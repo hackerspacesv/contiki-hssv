@@ -34,6 +34,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "contiki-conf.h"
+
 #include "clock.h"
 #include "rtimer.h"
 
@@ -83,13 +85,13 @@ void lptmr_init() {
   SIM->SCGC5 |= SIM_SCGC5_LPTMR_Enabled;
 
   //Set the clock source depending on the power profile
-#if defined(MKL26_POWER_PROFILE_PERFORMANCE_48MHZ_PLL)
+#if MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_PERFORMANCE_48MHZ_PLL
   //Use the external reference clock (16MHz oscillator) divided by 512 (31.25kHz).
   LPTMR0->PSR = LPTMR_PSR_PCS_OSCERCLK | LPTMR_PSR_PBYP_Enabled | LPTMR_PSR_PRESCALE_Div512;
-#elif defined(MKL26_POWER_PROFILE_LOWPOWER_4MHZ_INTREF)
+#elif MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_LOWPOWER_4MHZ_INTREF
   //Use the internal reference clock (fast 4MHz reference) divided by 128 (31.25kHz).
   LPTMR0->PSR = LPTMR_PSR_PCS_MCGIRCLK | LPTMR_PSR_PBYP_Enabled | LPTMR_PSR_PRESCALE_Div128;
-#elif defined(MKL26_POWER_PROFILE_LOWPOWER_4MHZ_EXTREF)
+#elif MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_LOWPOWER_4MHZ_EXTREF
   //Use the external reference clock (32.768kHz external osc.) without divider.
   LPTMR0->PSR = LPTMR_PSR_PCS_ERCLK32K | LPTMR_PSR_PBYP_Bypassed;
 #else

@@ -96,6 +96,9 @@ void startup() {
 
   //Set the SLEEPDEEP bit in the System Control Register to enable STANDBY mode.
   SCB->SCR = SCB_SCR_SLEEPDEEP_Msk;
+
+#else
+  #error "Unsupported power profile"
 #endif
 
   //Memory initialization.

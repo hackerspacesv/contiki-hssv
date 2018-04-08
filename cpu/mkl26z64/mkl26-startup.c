@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+#include "contiki-conf.h"
+
 #include "mkl26.h"
 #include "mkl26-sim.h"
 #include "mkl26-smc.h"
@@ -70,7 +72,7 @@ void startup() {
   //Power profile based initialization.
   //------------------------------------------------------------------------------------------------
 
-#if defined(MKL26_POWER_PROFILE_PERFORMANCE_48MHZ_PLL)
+#if MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_PERFORMANCE_48MHZ_PLL
   //Configure the 16MHz external oscillator.
   OSC->CR = OSC_CR_ERCLKEN_Enabled | OSC_CR_SC2P_Enabled | OSC_CR_SC8P_Enabled;
   MCG->C2 = MCG_C2_RANGE0_Very_High | MCG_C2_HGO0_Low_Power | MCG_C2_EREFS_Oscillator;
@@ -111,7 +113,7 @@ void startup() {
   //Select the PLL/2 source (48MHz) for all peripherals that have it as an option (TPM, USB0, UART0
   //and I2S0)
   SIM->SOPT2 = SIM_SOPT2_PLLFLLSEL_MCGPLLCLK_Div2;
-#elif defined(MKL26_POWER_PROFILE_LOWPOWER_4MHZ_INTREF)
+#elif MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_LOWPOWER_4MHZ_INTREF
   //Switch to FBI mode (FLL bypassed internal), enable the internal reference for use as MCGIRCLK
   //and enable the internal reference during stop mode.
   MCG->C1 = MCG_C1_CLKS_Internal | MCG_C1_FRDIV_Div_1_32 | MCG_C1_IREFS_Internal |
@@ -144,7 +146,7 @@ void startup() {
   SMC->PMCTRL = SMC_PMCTRL_STOPM_VLPS;
   SCB->SCR = SCB_SCR_SLEEPDEEP_Msk;
 
-#elif defined(MKL26_POWER_PROFILE_LOWPOWER_4MHZ_EXTREF)
+#elif MKL26_POWER_PROFILE == MKL26_POWER_PROFILE_LOWPOWER_4MHZ_EXTREF
   //Switch to FBI mode (FLL bypassed internal), enable the internal reference for use as MCGIRCLK
   //and disable the internal reference during stop mode.
   MCG->C1 = MCG_C1_CLKS_Internal | MCG_C1_FRDIV_Div_1_32 | MCG_C1_IREFS_Internal |

@@ -4,43 +4,6 @@
 #| Author: Joksan Alvarado.                                                                        |
 #+-------------------------------------------------------------------------------------------------+
 
-#Set a default CPU power profile in case none is specified.
-ifndef MKL26_POWER_PROFILE
-  MKL26_POWER_PROFILE = PERFORMANCE_48MHZ_PLL
-endif
-
-#Set the corresponding compiler flags depending on the currently selected power profile.
-ifeq ($(MKL26_POWER_PROFILE),PERFORMANCE_48MHZ_PLL)
-  #Performance 48MHZ PLL mode:
-  # - PLL is used to run the system from 16MHz external oscillator. CPU runs at 48MHz, bus at 24MHz.
-  # - LPTMR0 runs at 31.250kHz from 16 MHz external oscillator divided by 512.
-  # - Normal stop via WFI is used during sleep. System stays clocked and ready.
-  CFLAGS += -DMKL26_POWER_PROFILE_PERFORMANCE_48MHZ_PLL
-  CFLAGS += -DF_CPU=48000000
-  CFLAGS += -DF_BUS=24000000
-  CFLAGS += -DF_LPT=31250
-else ifeq ($(MKL26_POWER_PROFILE),LOWPOWER_4MHZ_INTREF)
-  #Low power 4MHZ internal reference mode:
-  # - 4MHz internal reference clock is used to run the system. CPU runs at 4MHz, bus at 2MHz.
-  # - LPTMR0 runs at 31.250kHz from 4MHz internal reference clock divided by 128.
-  # - Very low power stop (VLPS) via WFI is used during sleep. 4MHz internal reference stays on.
-  CFLAGS += -DMKL26_POWER_PROFILE_LOWPOWER_4MHZ_INTREF
-  CFLAGS += -DF_CPU=4000000
-  CFLAGS += -DF_BUS=2000000
-  CFLAGS += -DF_LPT=31250
-else ifeq ($(MKL26_POWER_PROFILE),LOWPOWER_4MHZ_EXTREF)
-  #Low power 4MHZ external reference mode:
-  # - 4MHz internal reference clock is used to run the system. CPU runs at 4MHz, bus at 2MHz.
-  # - LPTMR0 runs from external 32.768kHz signal - REQUIRES EXTERNAL OSCILLATOR on Pin 22/A8 (PTC1).
-  # - Very low power stop (VLPS) via WFI is used during sleep. Internal clocks are stopped.
-  CFLAGS += -DMKL26_POWER_PROFILE_LOWPOWER_4MHZ_EXTREF
-  CFLAGS += -DF_CPU=4000000
-  CFLAGS += -DF_BUS=2000000
-  CFLAGS += -DF_LPT=32768
-else
-  $(error Unsupported power profile: $(MKL26_POWER_PROFILE))
-endif
-
 #Set the toolchain program names.
 CC = arm-none-eabi-gcc
 AR = arm-none-eabi-ar

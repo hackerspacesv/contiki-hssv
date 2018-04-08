@@ -1,17 +1,17 @@
 #+-------------------------------------------------------------------------------------------------+
-#| Project makefile for the rtimer blink example.                                                  |
+#| Project makefile for the low power blink example.                                               |
 #|                                                                                                 |
 #| Author: Joksan Alvarado.                                                                        |
 #+-------------------------------------------------------------------------------------------------+
 
 #Set the main target.
-CONTIKI_PROJECT = rtimer-blink
+CONTIKI_PROJECT = low-power-blink
 all: $(CONTIKI_PROJECT)
 
-#Since this project targets the teensy-lc only, keep the project .co file (avoid recompiling).
-.SECONDARY: $(CONTIKI_PROJECT).co
+#Set the project configuration header.
+DEFINES += PROJECT_CONF_H=\"project-conf.h\"
 
 #Configure contiki for out of tree compilation and include its main makefile.
-CONTIKI = ../../../contiki
-TARGETDIRS += ../../../platform
+CONTIKI = ../../contiki
+TARGETDIRS += ../../platform
 include $(CONTIKI)/Makefile.include
