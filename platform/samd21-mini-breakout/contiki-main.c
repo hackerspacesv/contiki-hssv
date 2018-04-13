@@ -13,7 +13,7 @@
 #include "evsys.h"
 #include "rtc.h"
 
-void main() {
+int main() {
   //Initialize the EVSYS peripheral driver, which provides support for the RTC peripheral driver.
   evsys_init();
 

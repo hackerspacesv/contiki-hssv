@@ -41,7 +41,7 @@ void uart_init(volatile struct UART0_type *UART) {
     UART->C5 = UART0_C5_VAL;
 
     //Set the oversampling ratio, disable 10 bit mode.
-    UART->C4 = (UART0_OSR << UART0_C4_OSR_Pos) & UART0_C4_OSR_Msk | UART0_C4_M10_8_9Bit;
+    UART->C4 = ((UART0_OSR << UART0_C4_OSR_Pos) & UART0_C4_OSR_Msk) | UART0_C4_M10_8_9Bit;
 
     //Set the baud rate divider (MSB) and use a single stop bit.
     UART->BDH = (((UART0_SBR >> 8) << UART0_BDH_SBR_Pos) & UART0_BDH_SBR_Msk) | UART0_BDH_SBNS_1;

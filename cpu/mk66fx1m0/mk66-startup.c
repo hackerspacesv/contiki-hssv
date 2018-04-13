@@ -39,7 +39,7 @@ extern uint32_t __bss_start__;
 extern uint32_t __bss_end__;
 
 //External functions invoked by startup code.
-extern void main();
+extern int main();
 
 //--------------------------------------------------------------------------------------------------
 

@@ -23,7 +23,7 @@
 
 #include "syscalls.h"
 
-void main() {
+int main() {
   //Set pin 17/A3 as a low level output, so the 74LV1T125 doesn't consume too much power with a
   //floating input.
   GPIO_PIN_MODE_OUTPUT(BOARD_PIN_17);

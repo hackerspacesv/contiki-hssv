@@ -95,12 +95,10 @@ caddr_t _sbrk(int incr) {
 //Implementation of the write system call. This is used by printf to send data to the standard
 //output, whose content is then sent out through UART.
 int _write(int file, char *ptr, int len) {
-  uint32_t i;
-
   //Only send output for the standard output and standard error file descriptors.
   if (file == STDOUT_FILENO || file == STDERR_FILENO) {
 #if STDOUT_UART_ENABLED
-    for (i = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
       uart_tx(STDOUT_UART_INSTANCE, *ptr++);
 #endif //STDOUT_UART_ENABLED
     return len;

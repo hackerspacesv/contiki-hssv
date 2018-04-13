@@ -19,7 +19,7 @@
 
 #include "syscalls.h"
 
-void main() {
+int main() {
   //Initialize the clock library, including timers.
   clock_init();
 

@@ -17,8 +17,7 @@ CPUFLAGS += -specs=nano.specs -specs=nosys.specs
 
 #Set common C code flags.
 CFLAGS += -D__SAMD21G18A__=1
-CFLAGS += -g -ffunction-sections -fdata-sections -O2
-#CFLAGS += -Wall -g -ffunction-sections -fdata-sections -O2
+CFLAGS += -Wall -g -ffunction-sections -fdata-sections -O2
 CFLAGS += $(CPUFLAGS)
 
 #Set the linker flags.
